@@ -942,7 +942,7 @@ Response
 
 ---
 
-# 🧑‍💻 Participant (Builder) Creation — A→Z Production Doc (CommDesk)
+# 🧑‍💻 Participant (Builder) Creation — A→Z Production Doc (GDG Ranchi)
 
 > This defines the **complete creation + lifecycle of a Participant (Builder)**
 > aligned with your flow:
@@ -1627,7 +1627,7 @@ This Auth system is not just authentication.
 It is:
 
 ```text
-Identity + Access + Reputation + Trust Layer of CommDesk
+Identity + Access + Reputation + Trust Layer of GDG Ranchi
 ```
 
 Build this correctly → your entire platform becomes scalable, secure, and future-proof.

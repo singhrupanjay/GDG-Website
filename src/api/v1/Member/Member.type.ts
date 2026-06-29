@@ -7,11 +7,7 @@ type onBoardingSourceType =
   | "other";
 
 type memberStatusType =
-  | "On Boarding"
-  | "inactive"
-  | "Active"
-  | "Suspended"
-  | "Banned";
+  "On Boarding" | "inactive" | "Active" | "Suspended" | "Banned";
 
 export type MemberType = {
   firstName: string;
