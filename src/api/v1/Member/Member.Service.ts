@@ -1,4 +1,3 @@
-
 import { MemberModel } from "./Member.Schema";
 import { MemberType } from "./Member.type";
 import { MemberValidationSchema } from "./Member.Validator";
