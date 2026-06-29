@@ -4,6 +4,9 @@ export const envSchema = zod.object({
   FRONTEND_URL: zod.string(),
   PORT: zod.string().default("3000"),
   MONGO_URI: zod.string(),
+  JWT_ACCESS_SECRET: zod.string(),
+  JWT_REFRESH_SECRET: zod.string(),
+
   NODE_ENV: zod
     .enum(["development", "production", "test"])
     .default("development"),
