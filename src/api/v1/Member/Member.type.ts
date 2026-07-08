@@ -16,6 +16,7 @@ export type MemberType = {
   publicProfileUrl?: string;
   AuthId?: string;
   email: string;
+  Slug: string;
   membershipStatus?: memberStatusType;
   onboardingSource?: onBoardingSourceType;
   primaryRole?: string;

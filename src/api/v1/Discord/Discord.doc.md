@@ -68,7 +68,6 @@ Webhook Support
 
 ---
 
-
 # Discord Bot Responsibilities
 
 The bot is NOT responsible for business logic.
