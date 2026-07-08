@@ -95,6 +95,10 @@ class AuthUtils {
     return await argon2.hash(password);
   }
 
+  public async deleteUserById(userId: string): Promise<void> {
+    await AuthModel.findByIdAndDelete(userId);
+  }
+
   public async comparePassword(
     password: string,
     hashPassword: string,

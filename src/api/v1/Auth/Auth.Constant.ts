@@ -7,6 +7,7 @@ export let AuthConstant = {
   INVALID_CREDENTIALS: "Invalid credentials",
   TOKEN_EXPIRED: "Token expired",
   INVALID_TOKEN: "Invalid token",
+  LOGIN_SUCCESS: "Login successful",
 };
 
 export let ROLE_CONSTANT = {

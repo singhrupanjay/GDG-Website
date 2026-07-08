@@ -57,7 +57,6 @@ class AuthController {
         OfficialEmail,
         Website,
         socialLinks,
-        owner,
       } = req.body;
 
       let { path } = req.file || {};
@@ -73,10 +72,6 @@ class AuthController {
         };
       }
 
-      if (OfficialEmail === owner.email) {
-        throw Error("Official email cannot be the same as owner's email.");
-      }
-
       let Auth = await authService.createUser({
         email: OfficialEmail,
         passwordHash: password,
@@ -85,32 +80,6 @@ class AuthController {
         role: ROLE_CONSTANT.ORGANIZATION,
         emailVerified: false,
       });
-
-      let findMember = await memberUtils.Is_Member_Exist(owner.email);
-
-      if (!findMember) {
-        await memberService.createNewMember({
-          Slug: slugify("gdg-ranchi" + "-" + crypto.randomUUID(), {
-            lower: true,
-            strict: true,
-            trim: true,
-          }),
-
-          AuthId: String(Auth._id),
-          firstName: owner.firstName,
-          lastName: owner.lastName,
-          email: owner.email,
-          primaryRole: ROLE_CONSTANT.ADMIN,
-          location: owner.location,
-          skills: owner.skills,
-          areaOfInterest: owner.areaOfInterest,
-          internalNotes: owner.internalNotes,
-          imageUrl:
-            "https://img.freepik.com/premium-vector/boy-with-sweater-that-says-hes-boy_1230457-43137.jpg?w=360",
-          membershipStatus: "Active",
-          onboardingSource: "website",
-        });
-      }
 
       let CreateNewCommunity = await communityService.createNewCommunity({
         OwnerID: String(Auth._id),
@@ -123,6 +92,7 @@ class AuthController {
         Bio,
         City,
         ContactPhone,
+        Members: [Auth._id],
         Country,
         LogoUrl: cloudinary.secure_url,
         OfficialEmail,
@@ -222,7 +192,7 @@ class AuthController {
           FindUser,
           perms,
         },
-        "Login successful.",
+        AuthConstant.LOGIN_SUCCESS,
       );
     } catch (error: any) {
       SendResponse.ErrorResponse(res, error, error.message);

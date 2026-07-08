@@ -17,7 +17,6 @@ export const AuthSchema = new mongoose.Schema<AuthType>(
     email: {
       type: String,
       required: true,
-      unique: true,
       lowercase: true,
       trim: true,
       index: true,
