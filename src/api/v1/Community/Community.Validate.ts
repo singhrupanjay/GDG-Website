@@ -47,9 +47,6 @@ export const CreateOrganizerZodSchema = z.object({
   }),
 
   Status: z.enum(["pending", "under_review", "approved", "active"]),
-
-  Members: z.array(objectIdSchema).optional().default([]),
-  Judges: z.array(objectIdSchema).optional().default([]),
 });
 
 // ✅ Infer TypeScript type from schema

@@ -47,6 +47,13 @@ export const memberPermission = {
   VIEW_MEMBER: "member:view",
 };
 
+export const Permission = {
+  Update_Permissions: "permission:update",
+  View_Permissions: "permission:view",
+  Delete_Permissions: "permission:delete",
+  Create_Permissions: "permission:create",
+};
+
 export const Default_Organization_Permissions: PermissionSchemaType[] = [
   {
     name: memberPermission.VIEW_MEMBER,
@@ -68,6 +75,56 @@ export const Default_Organization_Permissions: PermissionSchemaType[] = [
     action: "create",
     resource: "create New Member",
     description: "Permission to create new members in the organization",
+  },
+
+  {
+    name: Event_Permissions.CREATE_EVENT,
+    action: "create",
+    resource: "create New Event",
+    description: "Permission to create new events in the organization",
+  },
+  {
+    name: Event_Permissions.UPDATE_EVENT,
+    action: "update",
+    resource: "update Event",
+    description: "Permission to update events in the organization",
+  },
+  {
+    name: Event_Permissions.DELETE_EVENT,
+    action: "delete",
+    resource: "delete Event",
+    description: "Permission to delete events in the organization",
+  },
+  {
+    name: Event_Permissions.VIEW_EVENT,
+    action: "read",
+    resource: "view Event",
+    description: "Permission to view events in the organization",
+  },
+
+  {
+    name: Permission.Create_Permissions,
+    action: "create",
+    resource: "create New Permission",
+    description: "Permission to create new permissions in the organization",
+  },
+  {
+    name: Permission.Update_Permissions,
+    action: "update",
+    resource: "update Permission",
+    description: "Permission to update permissions in the organization",
+  },
+  {
+    name: Permission.Delete_Permissions,
+    action: "delete",
+    resource: "delete Permission",
+    description: "Permission to delete permissions in the organization",
+  },
+  {
+    name: Permission.View_Permissions,
+    action: "read",
+    resource: "view Permission",
+    description: "Permission to view permissions in the organization",
   },
 ];
 

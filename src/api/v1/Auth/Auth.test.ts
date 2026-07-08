@@ -1,45 +1,13 @@
-import { describe, it, expect, beforeAll } from "@jest/globals";
+import { describe, it, expect, beforeAll, afterAll } from "@jest/globals";
 import supertest from "supertest";
 import app from "../../../app";
 import connectToMongoDB from "../../../infrastructure/db/mongo.db.config";
 import { authUtils } from "./Auth.Utils";
 import { AuthConstant } from "./Auth.Constant";
 import { communityUtils } from "../Community/Community.Utils";
+import mongoose from "mongoose";
 
 const data = {
-  owner: {
-    firstName: "Abhishek",
-    lastName: "Gupta",
-    email: "abhishek.gupta@devcommunity.org",
-    primaryRole: "ADMIN",
-    location: "Ranchi, Jharkhand",
-    skills: [
-      "Node.js",
-      "React",
-      "TypeScript",
-      "Express.js",
-      "MongoDB",
-      "Docker",
-      "RabbitMQ",
-      "AWS",
-    ],
-    areaOfInterest: [
-      "OPEN_SOURCE",
-      "MENTORSHIP",
-      "AI",
-      "WEB_DEVELOPMENT",
-      "CLOUD",
-    ],
-    internalNotes:
-      "Community founder, organizes monthly hackathons and technical workshops.",
-    accessLevel: {
-      internalDashboard: true,
-      communityForum: true,
-      adminControls: true,
-      superAdmin: true,
-    },
-  },
-
   CommunityName: "CodeVerse Community",
 
   password: "StrongPassword@123",
@@ -68,10 +36,15 @@ const data = {
   },
 };
 
-let OrganizationId: string;
+export let OrganizationId: string;
+export let AuthId: string;
 
 beforeAll(async () => {
   connectToMongoDB();
+});
+
+afterAll(async () => {
+  mongoose.connection.close();
 });
 
 describe("Test Auth Api", () => {
@@ -82,7 +55,8 @@ describe("Test Auth Api", () => {
 
     console.log("Response Body:", response.body); // Log the response body for debugging
 
-    OrganizationId = response.body.data._id;
+    OrganizationId = response.body.data?._id;
+    AuthId = response.body.data?._id; 
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty(
@@ -91,12 +65,34 @@ describe("Test Auth Api", () => {
     );
     expect(response.body).toHaveProperty("data");
   });
+
+  it("Login with the created Organization", async () => {
+    const response = await supertest(app).post("/api/v1/auth/login").send({
+      email: data.OfficialEmail,
+      password: data.password,
+    });
+
+    console.log("Login Response Body:------>", response.body);
+
+    // expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message", AuthConstant.LOGIN_SUCCESS);
+    expect(response.body).toHaveProperty("success", true);
+    expect(response.body).toHaveProperty("data");
+  });
 });
 
-describe("Test Auth Utils functions", () => {
-  it("should delete an organization by ID", async () => {
-    const deletedOrganization =
-      await communityUtils.DeleteCommunityById(OrganizationId);
-    console.log("Deleted Organization:", deletedOrganization); // Log the deleted organization for debugging
+
+// deleteUserById
+
+
+describe("Test Auth Utils deleteUserById function", () => {
+  it("should delete a user by ID", async () => {
+    try {
+      await authUtils.deleteUserById(AuthId);
+      console.log(`User with ID ${AuthId} deleted successfully.`);
+    } catch (error) {
+      console.error(`Error deleting user with ID ${AuthId}:`, error);
+      throw error; // Rethrow the error to fail the test
+    }
   });
 });
