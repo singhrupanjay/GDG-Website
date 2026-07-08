@@ -3,6 +3,7 @@ import { MemberType } from "./Member.type";
 import { ROLE_CONSTANT } from "../Auth/Auth.Constant";
 
 let MemberSchema = new mongoose.Schema<MemberType>({
+  Slug: { type: String, unique: true, sparse: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   imageUrl: { type: String, required: true },

@@ -6,6 +6,9 @@ export const envSchema = zod.object({
   MONGO_URI: zod.string(),
   JWT_ACCESS_SECRET: zod.string(),
   JWT_REFRESH_SECRET: zod.string(),
+  CLOUDINARY_CLOUD_NAME: zod.string(),
+  CLOUDINARY_API_KEY: zod.string(),
+  CLOUDINARY_API_SECRET: zod.string(),
 
   NODE_ENV: zod
     .enum(["development", "production", "test"])
