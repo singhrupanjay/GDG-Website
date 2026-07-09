@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { MemberType } from "./Member.type";
 import { ROLE_CONSTANT } from "../Auth/Auth.Constant";
+import { Roles } from "./Role.constant";
 
 let MemberSchema = new mongoose.Schema<MemberType>({
   Slug: { type: String, unique: true, sparse: true },
@@ -43,7 +44,7 @@ let MemberSchema = new mongoose.Schema<MemberType>({
 
   primaryRole: {
     type: String,
-    enum: ROLE_CONSTANT,
+    enum: Roles,
     default: ROLE_CONSTANT.PARTICIPANT,
   },
 

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import { nanoid } from "nanoid";
 import { memberService } from "./Member.Service";
 import SendResponse from "../../../utils/SendResponse";
 import { authService } from "../Auth/Auth.Service";
@@ -10,6 +11,7 @@ import { permissionService } from "../Permission/Permission.service";
 import { memberPermission } from "../Permission/Permission.constant";
 
 import slugify from "slugify";
+import EmailUtils from "../../../utils/Email.utils";
 
 // import { memberPermission } from "../Permission/Permission.constant";
 
@@ -49,7 +51,16 @@ class MemberController {
         throw new Error("Member already exists");
       }
       const randomPassword = randomBytes(7).toString("hex");
-      console.log("random password", randomPassword);
+
+      let emailTemplate = await memberUtils.INVITE_MEMBER_TEMPORARY(
+        email,
+        firstName + " " + lastName,
+        primaryRole,
+        randomPassword,
+      );
+
+      console.log("random password ---> ", randomPassword);
+
       const Auth = await authService.createUser({
         email,
         passwordHash: randomPassword,
@@ -59,14 +70,8 @@ class MemberController {
         emailVerified: false,
       });
 
-      // Slug: slugify(CommunityName + "-" + crypto.randomUUID(), {
-      //       lower: true,
-      //       strict: true,
-      //       trim: true,
-      //     }),
-
       const CreateNewMember = await memberService.createNewMember({
-        Slug: slugify("gdg-ranchi" + "-" + crypto.randomUUID(), {
+        Slug: slugify("gdg-ranchi" + "-" + nanoid(8), {
           lower: true,
           strict: true,
           trim: true,
@@ -87,6 +92,16 @@ class MemberController {
         areaOfInterest,
         internalNotes,
       });
+
+      await EmailUtils.transporter().sendMail({
+        from: process.env.SMTP_USER,
+        to: email,
+        subject:
+          "Invitation to Join GDG Ranchi — Empower, Learn, and Innovate Together!",
+
+        html: emailTemplate,
+      });
+
       await session.commitTransaction();
       session.endSession();
       return SendResponse.SuccessResponse(
@@ -108,6 +123,17 @@ class MemberController {
       }
       return SendResponse.ErrorResponse(res, errorData, message);
     }
+  };
+
+  findAllMembers = async (req: Request, res: Response) => {
+    try {
+      let FindAllMembers = await memberUtils.FIND_ALL_Members();
+      SendResponse.SuccessResponse(
+        res,
+        FindAllMembers,
+        "All Members fetched successfully",
+      );
+    } catch (error) {}
   };
 }
 

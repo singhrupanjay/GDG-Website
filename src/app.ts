@@ -4,10 +4,14 @@ const app = express();
 import rateLimit from "express-rate-limit";
 
 import cors from "cors";
-import { route } from "./routes/routes";
 import { env_Constant } from "./constant/env.constant";
+import { route } from "./routes/routes";
+import cookieParser from "cookie-parser";
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
 
 const isProduction = env_Constant.NODE_ENV === "production";
 const isTest = env_Constant.NODE_ENV === "test";

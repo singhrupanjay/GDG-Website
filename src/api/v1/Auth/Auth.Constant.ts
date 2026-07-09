@@ -12,9 +12,9 @@ export let AuthConstant = {
 
 export let ROLE_CONSTANT = {
   SUPER_ADMIN: "super_admin",
-  ADMIN: "admin",
+  ADMIN: "Admin",
   JUDGE: "judge",
-  PARTICIPANT: "participant",
-  ORGANIZATION: "organization",
-  MENTOR: "mentor",
-};
+  PARTICIPANT: "Participant",
+  ORGANIZATION: "Organizer",
+  MENTOR: "Mentor",
+} as const;

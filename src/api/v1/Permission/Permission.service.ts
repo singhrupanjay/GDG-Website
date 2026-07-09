@@ -17,7 +17,7 @@ class PermissionService {
 
   public async check_UserPermission(userId: string, permissionName: string) {
     const doc = await Permission.findOne({
-      userId,
+      userId: userId,
       permission: { $elemMatch: { name: permissionName } },
     });
     return !!doc;

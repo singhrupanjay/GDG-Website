@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { MemberType } from "./Member.type";
 import { ROLE_CONSTANT } from "../Auth/Auth.Constant";
+import { Roles } from "./Role.constant";
 
 const onboardingSourceEnum = z.enum([
   "website",
@@ -20,6 +21,8 @@ const membershipStatusEnum = z.enum([
 ]);
 
 export const MemberValidationSchema: z.ZodType<MemberType> = z.object({
+  Slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Invalid slug format"),
+
   firstName: z.string().min(1, "First name is required"),
 
   lastName: z.string().min(1, "Last name is required"),
@@ -39,12 +42,7 @@ export const MemberValidationSchema: z.ZodType<MemberType> = z.object({
 
   onboardingSource: onboardingSourceEnum.default("website").optional(),
 
-  primaryRole: z
-    .string()
-    .refine((val) => Object.values(ROLE_CONSTANT).includes(val), {
-      message: "Invalid role",
-    })
-    .optional(),
+  primaryRole: z.enum(Roles).default(ROLE_CONSTANT.PARTICIPANT),
 
   location: z.string().optional(),
 

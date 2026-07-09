@@ -69,6 +69,24 @@ class AuthUtils {
     return { accessToken, refreshToken };
   };
 
+  public async verifyAccessToken(token: string) {
+    try {
+      const decoded = jwt.verify(token, env_Constant.JWT_ACCESS_SECRET);
+      return decoded;
+    } catch (error) {
+      throw new Error("Invalid access token");
+    }
+  }
+
+  public async verifyRefreshToken(token: string) {
+    try {
+      const decoded = jwt.verify(token, env_Constant.JWT_REFRESH_SECRET);
+      return decoded;
+    } catch (error) {
+      throw new Error("Invalid refresh token");
+    }
+  }
+
   public async refreshMyAccess(oldRefreshToken: string, ip: string) {
     const decoded = jwt.verify(
       oldRefreshToken,
