@@ -41,6 +41,7 @@ export const Mentor_Permissions = {
 };
 
 export const memberPermission = {
+  FIND_ALL_MEMBERS: "member:findAll",
   CREATE_MEMBER: "member:create",
   UPDATE_MEMBER: "member:update",
   DELETE_MEMBER: "member:delete",

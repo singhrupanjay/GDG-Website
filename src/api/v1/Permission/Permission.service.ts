@@ -56,13 +56,13 @@ class PermissionService {
 
   public async getPermissionsForUser(userId: string) {
     console.log("Fetching permissions for userId:-->", userId);
-    const doc = await Permission.findOne({ userId }).lean();
+    const doc = await Permission.findOne({ userId: userId }).lean();
     return doc?.permission || [];
   }
 
   public async removePermissionFromUser(userId: string, resource: string) {
     const res = await Permission.updateOne(
-      { userId },
+      { userId: userId },
       { $pull: { permission: { resource } } },
     );
     return res;

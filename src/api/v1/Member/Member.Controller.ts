@@ -46,7 +46,9 @@ class MemberController {
         onboardingSource = "website",
         primaryRole = ROLE_CONSTANT.PARTICIPANT,
       } = req.body;
+
       const isMemberExist = await memberUtils.Is_Member_Exist(email);
+
       if (isMemberExist) {
         throw new Error("Member already exists");
       }
@@ -127,13 +129,32 @@ class MemberController {
 
   findAllMembers = async (req: Request, res: Response) => {
     try {
+      let userId = (req as Request & { userId?: string }).userId;
+
+      let checkPermissions = await permissionService.check_UserPermission(
+        String(userId),
+        memberPermission.FIND_ALL_MEMBERS,
+      );
+
+      if (!checkPermissions) {
+        throw new Error(
+          "Forbidden: You don't have permission to find all members",
+        );
+      }
+
       let FindAllMembers = await memberUtils.FIND_ALL_Members();
       SendResponse.SuccessResponse(
         res,
         FindAllMembers,
         "All Members fetched successfully",
       );
-    } catch (error) {}
+    } catch (error) {
+      SendResponse.ErrorResponse(
+        res,
+        error,
+        error instanceof Error ? error.message : "Internal Server Error",
+      );
+    }
   };
 }
 

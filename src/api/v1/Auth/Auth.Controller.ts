@@ -59,6 +59,12 @@ class AuthController {
         socialLinks,
       } = req.body;
 
+      let findUserByEmail = await authUtils.FIND_USER_BY_EMAIL(OfficialEmail);
+
+      if (findUserByEmail) {
+        throw new Error(AuthConstant.USER_ALREADY_EXISTS);
+      }
+
       let { path } = req.file || {};
 
       // If no uploaded file is provided (e.g., in tests), fall back to provided LogoUrl
@@ -145,27 +151,27 @@ class AuthController {
 
       console.log("Password comparison result:", comparePass);
 
-      // if (!comparePass) {
-      //   let failedLoginAttempts: number = await authUtils.failedLoginAttempts(
-      //     String(FindUser._id),
-      //   );
+      if (!comparePass) {
+        let failedLoginAttempts: number = await authUtils.failedLoginAttempts(
+          String(FindUser._id),
+        );
 
-      //   if (failedLoginAttempts >= 5) {
-      //     await authUtils.banUser(String(FindUser._id));
+        if (failedLoginAttempts >= 5) {
+          await authUtils.banUser(String(FindUser._id));
 
-      //     // Queue account banned email
-      //     const unbannedAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes from now
-      //     await EmailPublisher.sendAccountBannedEmail({
-      //       email: FindUser.email,
-      //       unbannedAt,
-      //     });
-      //   } else {
-      //     const attemptsLeft = 5 - failedLoginAttempts;
-      //     throw new Error(
-      //       `Invalid password. You have ${attemptsLeft} more attempt(s) before your account is temporarily banned for 30 min.`,
-      //     );
-      //   }
-      // }
+          // Queue account banned email
+          const unbannedAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes from now
+          // await EmailPublisher.sendAccountBannedEmail({
+          //   email: FindUser.email,
+          //   unbannedAt,
+          // });
+        } else {
+          const attemptsLeft = 5 - failedLoginAttempts;
+          throw new Error(
+            `Invalid password. You have ${attemptsLeft} more attempt(s) before your account is temporarily banned for 30 min.`,
+          );
+        }
+      }
 
       const perms = await permissionService.getPermissionsForUser(
         String(FindUser._id),
