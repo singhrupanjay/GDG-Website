@@ -90,11 +90,11 @@ class MemberController {
       });
 
       await MemberChannel.sendOnboardingEmail({
-        email: "abhishek.nexgen.dev@gmail.com",
-        firstName: "Abhishek",
-        lastName: "Kumar",
-        primaryRole: "Developer",
-        randomPassword: "Abhi@123",
+        firstName,
+        lastName,
+        email,
+        primaryRole,
+        randomPassword,
       });
 
       await session.commitTransaction();
