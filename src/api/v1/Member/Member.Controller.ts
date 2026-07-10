@@ -12,6 +12,7 @@ import { memberPermission } from "../Permission/Permission.constant";
 
 import slugify from "slugify";
 import EmailUtils from "../../../utils/Email.utils";
+import MemberChannel from "./Member.Channel";
 
 // import { memberPermission } from "../Permission/Permission.constant";
 
@@ -54,13 +55,6 @@ class MemberController {
       }
       const randomPassword = randomBytes(7).toString("hex");
 
-      let emailTemplate = await memberUtils.INVITE_MEMBER_TEMPORARY(
-        email,
-        firstName + " " + lastName,
-        primaryRole,
-        randomPassword,
-      );
-
       console.log("random password ---> ", randomPassword);
 
       const Auth = await authService.createUser({
@@ -95,13 +89,12 @@ class MemberController {
         internalNotes,
       });
 
-      await EmailUtils.transporter().sendMail({
-        from: process.env.SMTP_USER,
-        to: email,
-        subject:
-          "Invitation to Join GDG Ranchi — Empower, Learn, and Innovate Together!",
-
-        html: emailTemplate,
+      await MemberChannel.sendOnboardingEmail({
+        firstName,
+        lastName,
+        email,
+        primaryRole,
+        randomPassword,
       });
 
       await session.commitTransaction();

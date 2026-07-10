@@ -27,3 +27,11 @@ export type MemberType = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+
+export type sendOnboardingType = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  primaryRole: string;
+  randomPassword: string;
+};

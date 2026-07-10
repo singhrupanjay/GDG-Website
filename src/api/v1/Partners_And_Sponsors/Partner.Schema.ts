@@ -241,7 +241,7 @@ const PartnerSchema = new Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 /* ----------------------------- Indexes ----------------------------- */
