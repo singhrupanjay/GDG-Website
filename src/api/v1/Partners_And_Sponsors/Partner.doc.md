@@ -73,15 +73,15 @@ Partner/
 
 | Field          | Type     | Required |
 | -------------- | -------- | -------- |
-| organizationId | ObjectId | ✅        |
-| companyName    | String   | ✅        |
-| shortName      | String   | ❌        |
-| slug           | String   | ✅        |
-| description    | String   | ❌        |
-| industry       | String   | ❌        |
-| website        | URL      | ❌        |
-| companyLogo    | URL      | ✅        |
-| bannerImage    | URL      | ❌        |
+| organizationId | ObjectId | ✅       |
+| companyName    | String   | ✅       |
+| shortName      | String   | ❌       |
+| slug           | String   | ✅       |
+| description    | String   | ❌       |
+| industry       | String   | ❌       |
+| website        | URL      | ❌       |
+| companyLogo    | URL      | ✅       |
+| bannerImage    | URL      | ❌       |
 
 ---
 
@@ -743,62 +743,62 @@ description
 
 ## Schema
 
-* Required fields
-* Default values
-* Enums
-* Unique indexes
-* Soft delete
+- Required fields
+- Default values
+- Enums
+- Unique indexes
+- Soft delete
 
 ## Validation
 
-* Invalid email
-* Invalid URL
-* Missing required fields
-* Duplicate company
-* Invalid enums
+- Invalid email
+- Invalid URL
+- Missing required fields
+- Duplicate company
+- Invalid enums
 
 ## Services
 
-* Create
-* Update
-* Delete
-* Restore
-* Search
-* Filter
-* Pagination
-* Event linking
+- Create
+- Update
+- Delete
+- Restore
+- Search
+- Filter
+- Pagination
+- Event linking
 
 ## Controllers
 
-* All CRUD endpoints
-* Authorization
-* Validation errors
-* Business rule enforcement
+- All CRUD endpoints
+- Authorization
+- Validation errors
+- Business rule enforcement
 
 ## Integration
 
-* Organization isolation
-* Event ↔ Partner association
-* Soft delete lifecycle
-* Permission checks
+- Organization isolation
+- Event ↔ Partner association
+- Soft delete lifecycle
+- Permission checks
 
 ## Performance
 
-* Search under large datasets
-* Pagination efficiency
-* Index utilization
-* Concurrent update handling
+- Search under large datasets
+- Pagination efficiency
+- Index utilization
+- Concurrent update handling
 
 ---
 
 # Definition of Done
 
-* Complete Partner schema with audit fields and soft delete.
-* Validation layer covering all inputs and business rules.
-* Full CRUD API with search, filter, sort, pagination, and population.
-* Organization-scoped authorization and data isolation.
-* Event association and sponsorship lifecycle management.
-* API documentation (OpenAPI/Swagger) and Postman collection.
-* Comprehensive unit, integration, and edge-case tests.
-* Seed data for development and QA.
-* Production-ready logging, error handling, and monitoring hooks.
+- Complete Partner schema with audit fields and soft delete.
+- Validation layer covering all inputs and business rules.
+- Full CRUD API with search, filter, sort, pagination, and population.
+- Organization-scoped authorization and data isolation.
+- Event association and sponsorship lifecycle management.
+- API documentation (OpenAPI/Swagger) and Postman collection.
+- Comprehensive unit, integration, and edge-case tests.
+- Seed data for development and QA.
+- Production-ready logging, error handling, and monitoring hooks.

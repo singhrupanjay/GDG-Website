@@ -9,6 +9,7 @@ export const envSchema = zod.object({
   CLOUDINARY_CLOUD_NAME: zod.string(),
   CLOUDINARY_API_KEY: zod.string(),
   CLOUDINARY_API_SECRET: zod.string(),
+  RABBITMQ_URL: zod.string(),
   SMTP_HOST: zod.string(),
   SMTP_PORT: zod.string(),
   SMTP_USER: zod.string(),

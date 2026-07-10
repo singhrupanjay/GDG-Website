@@ -4,16 +4,16 @@
 
 Build a scalable Event Management System for GDG Ranchi that supports:
 
-* Workshops
-* DevFest
-* Study Jams
-* Cloud Community Days
-* Build with AI
-* Hackathons
-* Meetups
-* Bootcamps
-* Webinars
-* Conferences
+- Workshops
+- DevFest
+- Study Jams
+- Cloud Community Days
+- Build with AI
+- Hackathons
+- Meetups
+- Bootcamps
+- Webinars
+- Conferences
 
 The module should handle the complete event lifecycle from draft creation through publication, registration, execution, completion, analytics, and archival.
 
@@ -25,31 +25,31 @@ The module should handle the complete event lifecycle from draft creation throug
 
 ### Event Schema
 
-* ✅ Basic Information
-* ✅ SEO
-* ✅ Venue
-* ✅ Tickets
-* ✅ Timeline
-* ✅ FAQ
-* ✅ Prizes
-* ✅ Analytics
-* ✅ Settings
-* ✅ Moderation
-* ✅ Soft Delete
+- ✅ Basic Information
+- ✅ SEO
+- ✅ Venue
+- ✅ Tickets
+- ✅ Timeline
+- ✅ FAQ
+- ✅ Prizes
+- ✅ Analytics
+- ✅ Settings
+- ✅ Moderation
+- ✅ Soft Delete
 
 Remaining improvements:
 
-* [ ] Event Series support
-* [ ] Parent Event
-* [ ] Recurring Events
-* [ ] External Registration URL
-* [ ] Livestream URL
-* [ ] Recording URL
-* [ ] Certificate Template
-* [ ] Feedback Form
-* [ ] Cancellation Reason
-* [ ] Capacity Management
-* [ ] Custom Registration Fields
+- [ ] Event Series support
+- [ ] Parent Event
+- [ ] Recurring Events
+- [ ] External Registration URL
+- [ ] Livestream URL
+- [ ] Recording URL
+- [ ] Certificate Template
+- [ ] Feedback Form
+- [ ] Cancellation Reason
+- [ ] Capacity Management
+- [ ] Custom Registration Fields
 
 ---
 
@@ -113,42 +113,42 @@ Cyber Security
 
 ### Required
 
-* title
-* description
-* category
-* eventType
-* venue
-* timezone
-* dates
-* seo.slug
+- title
+- description
+- category
+- eventType
+- venue
+- timezone
+- dates
+- seo.slug
 
 ---
 
 ### Validate
 
-* URLs
-* Dates
-* Event Status
-* Visibility
-* Ticket Dates
-* Venue Coordinates
-* Timeline
-* FAQ
-* Prizes
-* Sponsor Rewards
+- URLs
+- Dates
+- Event Status
+- Visibility
+- Ticket Dates
+- Venue Coordinates
+- Timeline
+- FAQ
+- Prizes
+- Sponsor Rewards
 
 ---
 
 ### Business Rules
 
-* End date > Start date
-* Registration closes before event ends
-* Registration opens before registration closes
-* Ticket quantity ≥ soldCount
-* Ticket price ≥ 0
-* Prize amount ≥ 0
-* GeoJSON validation
-* Slug uniqueness
+- End date > Start date
+- Registration closes before event ends
+- Registration opens before registration closes
+- Ticket quantity ≥ soldCount
+- Ticket price ≥ 0
+- Prize amount ≥ 0
+- GeoJSON validation
+- Slug uniqueness
 
 ---
 
@@ -240,11 +240,11 @@ PATCH /events/:id/publish
 
 Checks:
 
-* Required fields complete
-* Venue exists
-* SEO valid
-* Timeline valid
-* Tickets valid
+- Required fields complete
+- Venue exists
+- SEO valid
+- Timeline valid
+- Tickets valid
 
 ---
 
@@ -338,12 +338,12 @@ Supports
 
 Manage
 
-* Organizers
-* Speakers
-* Mentors
-* Judges
-* Hosts
-* Volunteers
+- Organizers
+- Speakers
+- Mentors
+- Judges
+- Hosts
+- Volunteers
 
 APIs
 
@@ -361,12 +361,12 @@ DELETE /events/:id/team/:memberId
 
 Manage
 
-* Title Sponsors
-* Gold Sponsors
-* Community Partners
-* Media Partners
-* Knowledge Partners
-* Venue Partners
+- Title Sponsors
+- Gold Sponsors
+- Community Partners
+- Media Partners
+- Knowledge Partners
+- Venue Partners
 
 APIs
 
@@ -384,17 +384,17 @@ GET /events/:id/partners
 
 Manage
 
-* Tickets
-* Capacity
-* Waitlist
-* Approvals
+- Tickets
+- Capacity
+- Waitlist
+- Approvals
 
 Features
 
-* Free ticket
-* Paid ticket
-* Invite-only
-* Approval required
+- Free ticket
+- Paid ticket
+- Invite-only
+- Approval required
 
 ---
 
@@ -482,22 +482,22 @@ View only
 
 Automatically notify on:
 
-* Event Published
-* Registration Open
-* Registration Closing Soon
-* Event Reminder
-* Event Started
-* Event Completed
-* Cancellation
-* Ticket Approved
-* Waitlist Promotion
+- Event Published
+- Registration Open
+- Registration Closing Soon
+- Event Reminder
+- Event Started
+- Event Completed
+- Cancellation
+- Ticket Approved
+- Waitlist Promotion
 
 Channels
 
-* Email
-* Discord
-* Push
-* WhatsApp (future)
+- Email
+- Discord
+- Push
+- WhatsApp (future)
 
 ---
 
@@ -522,9 +522,6 @@ Analytics update
 ```
 
 ---
-
-
-
 
 For your current schema, you don't need 40+ APIs. A production-ready Event module can be covered with around **15–18 essential APIs**.
 
@@ -734,24 +731,12 @@ Request
 
 ```json
 {
-  "organizers": [
-    "687f7ab45e4d123456789111"
-  ],
-  "speakers": [
-    "687f7ab45e4d123456789112"
-  ],
-  "mentors": [
-    "687f7ab45e4d123456789113"
-  ],
-  "judges": [
-    "687f7ab45e4d123456789114"
-  ],
-  "hosts": [
-    "687f7ab45e4d123456789115"
-  ],
-  "volunteers": [
-    "687f7ab45e4d123456789116"
-  ]
+  "organizers": ["687f7ab45e4d123456789111"],
+  "speakers": ["687f7ab45e4d123456789112"],
+  "mentors": ["687f7ab45e4d123456789113"],
+  "judges": ["687f7ab45e4d123456789114"],
+  "hosts": ["687f7ab45e4d123456789115"],
+  "volunteers": ["687f7ab45e4d123456789116"]
 }
 ```
 
@@ -767,12 +752,8 @@ Request
 
 ```json
 {
-  "partners": [
-    "687f7ab45e4d123456789201"
-  ],
-  "sponsors": [
-    "687f7ab45e4d123456789202"
-  ]
+  "partners": ["687f7ab45e4d123456789201"],
+  "sponsors": ["687f7ab45e4d123456789202"]
 }
 ```
 
@@ -948,33 +929,30 @@ featured=true
 }
 ```
 
-
-
-
 ---
 
 # Phase 14 — Testing
 
 ## Schema
 
-* Required fields
-* Defaults
-* Enums
-* GeoJSON
-* Dates
-* Soft delete
-* Indexes
+- Required fields
+- Defaults
+- Enums
+- GeoJSON
+- Dates
+- Soft delete
+- Indexes
 
 ---
 
 ## Validation
 
-* Invalid URLs
-* Invalid dates
-* Invalid venue
-* Invalid ticket
-* Invalid prize
-* Duplicate slug
+- Invalid URLs
+- Invalid dates
+- Invalid venue
+- Invalid ticket
+- Invalid prize
+- Duplicate slug
 
 ---
 
@@ -998,42 +976,42 @@ Every role
 
 ## Integration
 
-* Event ↔ Members
-* Event ↔ Partners
-* Event ↔ Registration
-* Event ↔ Tickets
-* Event ↔ Timeline
+- Event ↔ Members
+- Event ↔ Partners
+- Event ↔ Registration
+- Event ↔ Tickets
+- Event ↔ Timeline
 
 ---
 
 ## Edge Cases
 
-* Duplicate slug
-* Overlapping event times
-* Capacity exceeded
-* Registration after close
-* Event cancellation with attendees
-* Speaker removed after publication
-* Sponsor removed after rewards assigned
-* Invalid GeoJSON
-* Concurrent ticket purchases
-* Soft-deleted event access
+- Duplicate slug
+- Overlapping event times
+- Capacity exceeded
+- Registration after close
+- Event cancellation with attendees
+- Speaker removed after publication
+- Sponsor removed after rewards assigned
+- Invalid GeoJSON
+- Concurrent ticket purchases
+- Soft-deleted event access
 
 ---
 
 # Phase 15 — Documentation
 
-* OpenAPI / Swagger
-* Postman Collection
-* Event lifecycle diagram
-* Database ER diagram
-* Sequence diagrams
-* Permission matrix
-* Validation rules
-* Error catalog
-* Seed data
-* Deployment guide
-* Monitoring and logging guide
+- OpenAPI / Swagger
+- Postman Collection
+- Event lifecycle diagram
+- Database ER diagram
+- Sequence diagrams
+- Permission matrix
+- Validation rules
+- Error catalog
+- Seed data
+- Deployment guide
+- Monitoring and logging guide
 
 ---
 
@@ -1041,13 +1019,13 @@ Every role
 
 The module is considered complete when it provides:
 
-* Production-ready schema with lifecycle management.
-* Full CRUD and lifecycle APIs (publish, cancel, archive, restore, duplicate).
-* Role-based authorization and organization/community isolation.
-* Search, filtering, sorting, pagination, and SEO-friendly lookup.
-* Ticketing, registration, speakers, mentors, judges, partners, sponsors, timeline, venue, FAQs, and prizes fully integrated.
-* Analytics, notifications, scheduled jobs, and audit logging.
-* Comprehensive unit, integration, and end-to-end tests.
-* Complete API documentation and developer guides.
+- Production-ready schema with lifecycle management.
+- Full CRUD and lifecycle APIs (publish, cancel, archive, restore, duplicate).
+- Role-based authorization and organization/community isolation.
+- Search, filtering, sorting, pagination, and SEO-friendly lookup.
+- Ticketing, registration, speakers, mentors, judges, partners, sponsors, timeline, venue, FAQs, and prizes fully integrated.
+- Analytics, notifications, scheduled jobs, and audit logging.
+- Comprehensive unit, integration, and end-to-end tests.
+- Complete API documentation and developer guides.
 
 This implementation plan is suitable for scaling from a single GDG chapter to a multi-community platform hosting thousands of events annually.
