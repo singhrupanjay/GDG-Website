@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
 import { ROLE_CONSTANT } from "./Auth.Constant";
+import { Roles } from "../Member/Role.constant";
 
 const RefreshTokenSchema = new mongoose.Schema(
   {
@@ -24,7 +25,7 @@ export const AuthSchema = new mongoose.Schema<AuthType>(
 
     role: {
       type: String,
-      enum: ROLE_CONSTANT,
+      enum: Roles,
       default: ROLE_CONSTANT.PARTICIPANT,
     },
 

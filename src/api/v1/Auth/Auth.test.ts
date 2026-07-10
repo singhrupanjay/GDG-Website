@@ -56,7 +56,7 @@ describe("Test Auth Api", () => {
     console.log("Response Body:", response.body); // Log the response body for debugging
 
     OrganizationId = response.body.data?._id;
-    AuthId = response.body.data?._id; 
+    AuthId = response.body.data?._id;
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty(
@@ -81,9 +81,7 @@ describe("Test Auth Api", () => {
   });
 });
 
-
 // deleteUserById
-
 
 describe("Test Auth Utils deleteUserById function", () => {
   it("should delete a user by ID", async () => {

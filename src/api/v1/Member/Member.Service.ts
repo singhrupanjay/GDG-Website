@@ -5,7 +5,7 @@ import { MemberValidationSchema } from "./Member.Validator";
 class MemberService {
   async createNewMember(Data: MemberType) {
     try {
-      MemberValidationSchema.parse(Data);
+      await MemberValidationSchema.safeParseAsync(Data);
       let CreateNewMember = await MemberModel.create(Data);
       if (!CreateNewMember) throw new Error("Failed to Create New Member");
       return CreateNewMember;

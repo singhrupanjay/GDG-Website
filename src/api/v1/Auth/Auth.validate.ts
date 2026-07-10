@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { AuthType } from "./Auth.type";
 import { ROLE_CONSTANT } from "./Auth.Constant";
+import { Roles } from "../Member/Role.constant";
 
 export const ValidateAuthData: z.ZodType<AuthType | unknown> = z
   .object({
@@ -8,9 +9,7 @@ export const ValidateAuthData: z.ZodType<AuthType | unknown> = z
     passwordHash: z
       .string()
       .min(8, "Password must be at least 8 characters long"),
-    role: z
-      .enum(Object.values(ROLE_CONSTANT) as [string, ...string[]])
-      .default(ROLE_CONSTANT.PARTICIPANT),
+    role: z.enum(Roles).default(ROLE_CONSTANT.PARTICIPANT),
     userId: z.string().optional(),
     emailVerified: z.boolean().optional().default(false),
     failedLoginAttempts: z.number().optional().default(0),

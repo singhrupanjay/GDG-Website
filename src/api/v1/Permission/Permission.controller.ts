@@ -5,7 +5,12 @@ import { permissionService } from "./Permission.service";
 class PermissionController {
   async getUserPermissions(req: Request, res: Response) {
     try {
-      const { userId } = req.params;
+      const { userId } = req.query;
+      console.log("Fetching permissions for userId:-->", userId);
+
+      if (!userId) {
+        throw new Error("userId parameter is required");
+      }
       const perms = await permissionService.getPermissionsForUser(
         String(userId),
       );
