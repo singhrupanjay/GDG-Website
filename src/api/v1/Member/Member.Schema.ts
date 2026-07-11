@@ -26,8 +26,6 @@ const MemberSchema = new mongoose.Schema<MemberType>(
       required: true,
     },
 
-
-
     email: {
       type: String,
       required: true,

@@ -14,6 +14,10 @@ import { memberUtils } from "../Member/Member.Utils";
 
 import { cloudinaryUtils } from "../../../utils/Cloudinary.utils";
 import { env_Constant } from "../../../constant/env.constant";
+import AuthChannel from "./Auth.Channel.";
+import { otpUtils } from "../OTP/OTP.Utils";
+import { otpService } from "../OTP/OTP.Service";
+import { OTPType } from "../OTP/Otp.Type";
 
 class AuthController {
   private async setAuthCookiesAndHeaders(
@@ -98,7 +102,7 @@ class AuthController {
         Bio,
         City,
         ContactPhone,
-        Members: [Auth._id],
+        Members: [],
         Country,
         LogoUrl: cloudinary.secure_url,
         OfficialEmail,
@@ -209,22 +213,37 @@ class AuthController {
     let email: string = req.body.email;
 
     try {
-      let FindUser = await authUtils.FIND_USER_BY_EMAIL(email);
-      if (!FindUser) {
+      let AuthUser = await memberUtils.FIND_Member_BY_EMAIL(email);
+
+      console.log("AuthUser found for password reset:", AuthUser);
+
+      if (!AuthUser) {
         throw new Error(AuthConstant.USER_NOT_FOUND);
       }
 
-      // Generate a password reset token (could be JWT or a random string stored in DB)
-      const resetToken = jwt.sign(
-        { userId: FindUser._id },
-        env_Constant.JWT_ACCESS_SECRET,
-        { expiresIn: "1h" },
+      const generatedOtp = await otpUtils.generateOTP(6); // Generate a 6-digit OTP
+
+      await otpService.createAndUpdateOtp(
+        email,
+        OTPType.PASSWORD_RESET,
+        generatedOtp,
       );
 
-      const resetLink = `${env_Constant.FRONTEND_URL}/reset-password?email=${email}&token=${resetToken}`;
+      // Send OTP email via RabbitMQ
 
-      // Queue forgot password email
-      // await EmailPublisher.sendForgotPasswordEmail(email, resetLink);
+      await AuthChannel.sendOtp({
+        purpose: "password_reset", // Updated purpose
+        actionText: `
+       We received a request to reset your password for GDG Ranchi.
+       Please use the secure 6-digit verification code provided in your account details box to verify
+       your identity and set up a new password. For your security, this code will expire shortly. 
+       If you did not request this change, you can safely ignore this email—your account remains
+        completely secure and no changes will be made.
+      `,
+        fullName: AuthUser.firstName + " " + AuthUser.lastName,
+        email: email,
+        otp: generatedOtp,
+      });
 
       SendResponse.SuccessResponse(res, null, "Password reset email sent.");
     } catch (error: any) {
@@ -233,10 +252,58 @@ class AuthController {
   };
 
   public changePassword = async (req: Request, res: Response) => {
-    let { email, token } = req.query;
+    let { email } = req.query;
+      let { newPassword, confirmPassword, otp } = req.body;
 
-    // This would be the endpoint hit when user clicks the reset link and submits new password
-    // Implementation would involve verifying the reset token, allowing user to set new password, etc.
+    try {
+      let AuthUser = await memberUtils.FIND_Member_BY_EMAIL(String(email));
+
+      if (!AuthUser) {
+        throw new Error(AuthConstant.USER_NOT_FOUND);
+      }
+
+
+        if (newPassword !== confirmPassword) {
+        throw new Error("New password and confirm password do not match.");
+      }
+
+
+  // Validate the OTP for password reset using zod 
+
+
+  
+
+      let isOtpValid = await otpUtils.verifyOTP(
+        String(email),
+        String(otp),
+        OTPType.PASSWORD_RESET,
+      );
+
+      console.log("OTP validation result:", isOtpValid);
+
+      if (!isOtpValid) {
+        throw new Error("Invalid or expired OTP.");
+      }
+
+      // delte otp if more that 5 attempts are made
+
+    
+
+      let hashedPassword = await authUtils.hashPassword(newPassword);
+
+      let updatePassword = await authService.UpdateUserPassword(
+        String(AuthUser._id),
+        hashedPassword,
+      );
+
+      SendResponse.SuccessResponse(
+        res,
+        isOtpValid,
+        "Password changed successfully.",
+      );
+    } catch (error: any) {
+      SendResponse.ErrorResponse(res, error, error.message);
+    }
   };
 }
 

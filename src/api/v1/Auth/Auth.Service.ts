@@ -20,6 +20,21 @@ class AuthService {
       throw error;
     }
   }
+
+  public async UpdateUserPassword(
+    userId: string,
+    newPassword: string,
+  ): Promise<void> {
+    try {
+      const hashedPassword = await authUtils.hashPassword(newPassword);
+      await AuthModel.findByIdAndUpdate(userId, {
+        passwordHash: hashedPassword,
+      });
+    } catch (error) {
+      console.error("Error updating user password:", error);
+      throw error;
+    }
+  }
 }
 
 export const authService = new AuthService();
