@@ -1,67 +1,116 @@
 export const Roles = [
-  "Participant",
+  /**
+   * Leadership
+   */
+  "Community Lead",
+  "Chapter Lead",
+  "Vice Lead",
   "Organizer",
   "Co-Organizer",
-  "Chapter Lead",
-  "Community Lead",
-  "Vice Lead",
-  "Core Team Member",
   "Admin",
 
-  // Technical
+  /**
+   * Core Team
+   */
+  "Core Team Member",
+  "Community Manager",
+  "Operations Lead",
+  "Member Success Manager",
+
+  /**
+   * Technical
+   */
   "Technical Lead",
   "Developer Lead",
-  "AI / ML Lead",
+  "Software Engineer",
+  "Full Stack Developer",
+  "Frontend Developer",
+  "Backend Developer",
+  "Mobile Developer",
   "Web Development Lead",
   "Mobile Development Lead",
+  "AI / ML Lead",
   "Cloud Lead",
-  "Open Source Lead",
   "DevOps Lead",
   "Security Lead",
+  "Open Source Lead",
+  "Data Science Lead",
 
-  // Programs & Events
+  /**
+   * Programs & Events
+   */
   "Program Lead",
   "Events Lead",
+  "Event Manager",
   "Workshop Lead",
   "Hackathon Lead",
   "Speaker Coordinator",
+  "Session Host",
+  "MC",
 
-  // Marketing & Growth
+  /**
+   * Marketing & Growth
+   */
   "Marketing Lead",
-  "Growth Lead",
-  "Social Media Lead",
-  "Branding Lead",
   "Community Growth Lead",
+  "Growth Lead",
+  "Branding Lead",
+  "Social Media Lead",
+  "Public Relations Lead",
 
-  // Content & Media
+  /**
+   * Design & Media
+   */
+  "Design Lead",
+  "UI/UX Designer",
+  "Graphic Designer",
+  "Motion Designer",
   "Content Lead",
   "Technical Writer",
   "Content Creator",
-  "Video Editor",
   "Photographer",
-  "Designer",
-  "UI/UX Designer",
+  "Videographer",
+  "Video Editor",
 
-  // Partnerships & Sponsorship
+  /**
+   * Partnerships
+   */
   "Partnerships Lead",
   "Sponsorship Lead",
   "Industry Relations Lead",
 
-  // Community Operations
-  "Community Manager",
-  "Community Moderator",
-  "Member Success Manager",
-  "Campus Ambassador",
-
-  // Education & Mentorship
+  /**
+   * Education
+   */
   "Mentor",
-  "Instructor",
-  "Workshop Mentor",
+  "Technical Mentor",
   "Student Mentor",
+  "Workshop Mentor",
+  "Instructor",
+  "Trainer",
 
-  // Support
+  /**
+   * Community
+   */
+  "Campus Ambassador",
+  "Community Moderator",
   "Volunteer",
   "Event Volunteer",
   "Technical Support",
   "Logistics Coordinator",
+
+  /**
+   * Members
+   */
+  "Participant",
+  "Member",
+
+  /**
+   * Guests
+   */
+  "Speaker",
+  "Judge",
+  "Sponsor Representative",
+  "Partner Representative",
 ] as const;
+

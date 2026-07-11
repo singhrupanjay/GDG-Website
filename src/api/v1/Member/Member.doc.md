@@ -4,7 +4,7 @@
 
 ---
 
-# 🧠 SYSTEM MODEL
+## 🧠 SYSTEM MODEL
 
 ```txt
 Auth → User → Member → Role → Permission
@@ -34,68 +34,161 @@ Auth → User → Member → Role → Permission
 
 ---
 
-## 🔹 1. Create / Invite Member
+Here's the updated API documentation based on your current `Member` schema and controller.
+
+---
+
+# 🔹 1. Create / Invite Member
 
 ```http
 POST /api/v1/members
 ```
 
+Creates a new member, generates an authentication account, assigns a role, and sends an onboarding email with a temporary password.
+
 ---
 
-### 🔐 Authentication Modes
+## 🔐 Authentication
 
-```txt
-JWT → dashboard/internal
-API KEY → external integrations
+Supports both dashboard users and external integrations.
+
+```text
+JWT → Dashboard / Internal Users
+
+API Key → External Integrations
 ```
 
 ---
 
-### 📥 Headers
+## 📥 Headers
 
 ```http
 Authorization: Bearer <JWT | API_KEY>
-Idempotency-Key: <uuid>   // REQUIRED for external API
-X-Community-Id: <communityId> // REQUIRED
+X-Community-Id: <communityId>
+
+# Required only for external integrations
+Idempotency-Key: <UUID>
 ```
 
 ---
 
-### 📦 Request Body
+## 📦 Request Body
 
 ```json
 {
   "firstName": "Aarav",
   "lastName": "Mehta",
   "email": "aarav.mehta4827@protonmail.com",
-  "publicProfileUrl": "https://github.com/aaravmehta",
+  "Bio": "Backend Developer | Open Source Contributor",
+
   "imageUrl": "https://img.freepik.com/free-vector/young-man-glasses-avatar_1308-174676.jpg",
-  "membershipStatus": "Active",
+
+  "publicProfileUrl": "https://github.com/aaravmehta",
+
+  "membershipStatus": "On Boarding",
+
   "onboardingSource": "website",
-  "primaryRole": "mentor",
-  "location": "Toronto",
-  "skills": ["TypeScript", "GraphQL", "Docker"],
-  "areaOfInterest": ["OPEN_SOURCE", "AI"],
-  "internalNotes": "Active contributor, prefers backend-heavy tasks"
+
+  "primaryRole": "PARTICIPANT",
+
+  "location": {
+    "city": "Toronto",
+    "state": "Ontario",
+    "country": "Canada",
+    "pinCode": "M5V3L9"
+  },
+
+  "socialLinks": {
+    "linkedin": "https://linkedin.com/in/aaravmehta",
+    "github": "https://github.com/aaravmehta",
+    "twitter": "https://twitter.com/aaravmehta",
+    "website": "https://aarav.dev",
+    "instagram": "https://instagram.com/aarav",
+    "youtube": "https://youtube.com/@aarav",
+    "portfolio": "https://portfolio.aarav.dev",
+    "medium": "https://medium.com/@aarav"
+  },
+
+  "skills": ["TypeScript", "Node.js", "GraphQL", "Docker"],
+
+  "areaOfInterest": ["OPEN_SOURCE", "AI", "WEB_DEVELOPMENT"],
+
+  "internalNotes": "Active contributor, prefers backend-heavy tasks."
 }
 ```
 
 ---
 
-### ✅ Success Response
+## 🔒 Server Generated Fields
+
+The following fields are generated automatically by the backend and **must not** be sent by the client.
+
+| Field               | Description                   |
+| ------------------- | ----------------------------- |
+| `Slug`              | Unique public slug            |
+| `AuthId`            | Linked authentication account |
+| `temporaryPassword` | Generated randomly            |
+| `emailVerified`     | Defaults to `false`           |
+| `createdAt`         | Auto-generated                |
+| `updatedAt`         | Auto-generated                |
+
+---
+
+## ✅ Success Response (201 Created)
 
 ```json
 {
   "success": true,
-  "message": "Member invited successfully",
+  "message": "New member invited successfully. Please verify your email to activate your account.",
   "data": {
-    "memberId": "64fa...",
-    "status": "ON_BOARDING"
+    "memberId": "688c65e0ab41b18d3c4d2e10",
+    "status": "On Boarding"
   }
 }
 ```
 
 ---
+
+## ❌ Validation Error (400)
+
+```json
+{
+  "success": false,
+  "message": "Validation Failed",
+  "errors": [
+    {
+      "field": "email",
+      "message": "Invalid email format"
+    },
+    {
+      "field": "Bio",
+      "message": "Bio is required"
+    }
+  ]
+}
+```
+
+---
+
+## ❌ Member Already Exists (409)
+
+```json
+{
+  "success": false,
+  "message": "Member already exists."
+}
+```
+
+---
+
+## ❌ Permission Denied (403)
+
+```json
+{
+  "success": false,
+  "message": "Forbidden: You don't have permission to create members."
+}
+```
 
 ### ❌ Error Responses
 

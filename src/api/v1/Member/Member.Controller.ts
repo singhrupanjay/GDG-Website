@@ -34,15 +34,35 @@ class MemberController {
     session.startTransaction();
     try {
       const {
-        email,
         firstName,
         lastName,
-        location = "",
+        email,
+        Bio,
+        imageUrl,
+        publicProfileUrl = "",
+
+        location = {
+          city: "",
+          state: "",
+          country: "",
+          pinCode: "",
+        },
+
+        socialLinks = {
+          linkedin: "",
+          github: "",
+          twitter: "",
+          website: "",
+          instagram: "",
+          youtube: "",
+          portfolio: "",
+          medium: "",
+        },
+
         skills = [],
         areaOfInterest = [],
         internalNotes = "",
-        publicProfileUrl = "",
-        imageUrl,
+
         membershipStatus = "On Boarding",
         onboardingSource = "website",
         primaryRole = ROLE_CONSTANT.PARTICIPANT,
@@ -53,11 +73,12 @@ class MemberController {
       if (isMemberExist) {
         throw new Error("Member already exists");
       }
+
       const randomPassword = randomBytes(7).toString("hex");
 
-      console.log("random password ---> ", randomPassword);
+      console.log("Random Password:", randomPassword);
 
-      const Auth = await authService.createUser({
+      const auth = await authService.createUser({
         email,
         passwordHash: randomPassword,
         failedLoginAttempts: 0,
@@ -66,26 +87,38 @@ class MemberController {
         emailVerified: false,
       });
 
-      const CreateNewMember = await memberService.createNewMember({
-        Slug: slugify("gdg-ranchi" + "-" + nanoid(8), {
+      const createNewMember = await memberService.createNewMember({
+        Slug: slugify(`gdg-ranchi-${nanoid(8)}`, {
           lower: true,
           strict: true,
           trim: true,
         }),
+
         firstName,
         lastName,
-        imageUrl:
-          imageUrl ||
-          "https://img.freepik.com/premium-vector/boy-with-sweater-that-says-hes-boy_1230457-43137.jpg?w=360",
-        publicProfileUrl,
         email,
-        AuthId: String(Auth._id),
+        Bio,
+
+        imageUrl:
+          imageUrl ??
+          "https://img.freepik.com/premium-vector/boy-with-sweater-that-says-hes-boy_1230457-43137.jpg?w=360",
+
+  
+
+        AuthId: auth._id.toString(),
+
         membershipStatus,
         onboardingSource,
         primaryRole,
+
         location,
+
+        socialLinks,
+
         skills,
+
         areaOfInterest,
+
         internalNotes,
       });
 
@@ -102,8 +135,8 @@ class MemberController {
       return SendResponse.SuccessResponse(
         res,
         {
-          memberId: CreateNewMember._id,
-          status: CreateNewMember.membershipStatus,
+          memberId: createNewMember._id,
+          status: createNewMember.membershipStatus,
         },
         "New Member invited successfully. Please verify your email to activate your account.",
       );
@@ -126,7 +159,7 @@ class MemberController {
 
       let checkPermissions = await permissionService.check_UserPermission(
         String(userId),
-        memberPermission.FIND_ALL_MEMBERS,
+        memberPermission.VIEW_MEMBER,
       );
 
       if (!checkPermissions) {
