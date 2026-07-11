@@ -13,16 +13,31 @@ export type MemberType = {
   firstName: string;
   lastName: string;
   imageUrl?: string;
-  publicProfileUrl?: string;
+  Bio: string;
   AuthId?: string;
   email: string;
   Slug: string;
   membershipStatus?: memberStatusType;
   onboardingSource?: onBoardingSourceType;
   primaryRole?: string;
-  location?: string;
+  location: {
+    city: String;
+    state: String;
+    country: String;
+    pinCode: String;
+  };
   skills?: string[];
   areaOfInterest?: string[];
+  socialLinks: {
+    linkedin: String;
+    github: String;
+    twitter: String;
+    website: String;
+    instagram: String;
+    youtube: String;
+    portfolio: String;
+    medium: String;
+  };
   internalNotes?: string;
   createdAt?: Date;
   updatedAt?: Date;
