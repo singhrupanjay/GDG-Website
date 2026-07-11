@@ -1,7 +1,10 @@
 import { AuthModel } from "./Auth.model";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
+import path from "path";
+import fs from "fs";
 import { env_Constant } from "../../../constant/env.constant";
+import { OtpTemplateType } from "./Auth.type";
 
 class AuthUtils {
   public async FIND_USER_BY_EMAIL(email: string) {
@@ -67,6 +70,28 @@ class AuthUtils {
     );
 
     return { accessToken, refreshToken };
+  };
+
+  public getOtpTemplate = (otpProps: OtpTemplateType) => {
+    // src/api/v1/Auth/Template/universal-otp.html
+    let OtpFilePath = path.join(__dirname, "Template/universal-otp.html");
+    let OtpTemplate = fs.readFileSync(OtpFilePath, "utf-8");
+
+    let TemplateData = {
+      "{{purpose}}": otpProps.purpose,
+      "{{actionText}}": otpProps.actionText,
+      "{{fullName}}": otpProps.fullName,
+      "{{otp}}": otpProps.otp,
+    };
+
+    for (const key in TemplateData) {
+      OtpTemplate = OtpTemplate.replace(
+        new RegExp(key, "g"),
+        TemplateData[key as keyof typeof TemplateData],
+      );
+    }
+
+    return OtpTemplate;
   };
 
   public async verifyAccessToken(token: string) {

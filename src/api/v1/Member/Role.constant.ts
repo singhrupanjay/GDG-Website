@@ -113,4 +113,3 @@ export const Roles = [
   "Sponsor Representative",
   "Partner Representative",
 ] as const;
-

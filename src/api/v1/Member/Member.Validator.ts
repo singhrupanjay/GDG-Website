@@ -49,8 +49,6 @@ export const MemberValidationSchema = z.object({
 
   imageUrl: z.string().url(),
 
-
-
   email: z.string().email().trim().toLowerCase(),
 
   AuthId: z

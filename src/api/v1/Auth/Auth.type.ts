@@ -47,3 +47,11 @@ export type AuthType = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+
+export type OtpTemplateType = {
+  purpose: "email_verification" | "password_reset" | "login_otp" | "rsvp_otp";
+  actionText: string;
+  fullName: string;
+  email: string;
+  otp: string;
+};

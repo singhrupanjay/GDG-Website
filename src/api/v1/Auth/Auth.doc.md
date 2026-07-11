@@ -1043,6 +1043,407 @@ BuilderStats {
 
 ---
 
+# 🏛️ Community Registration
+
+## 🚀 Endpoint
+
+```http
+POST /api/v1/auth/community-signup
+```
+
+---
+
+# 🧠 Purpose
+
+Register a **new developer community/organization** on the platform.
+
+This endpoint:
+
+- creates an Organization authentication account
+- registers the community profile
+- uploads the community logo (optional)
+- generates a unique community slug
+- assigns default organization permissions
+- sets the community status to **Pending**
+- prepares the community for admin review and email verification
+
+---
+
+# 📥 Request Type
+
+```http
+multipart/form-data
+```
+
+> **Why multipart/form-data?**
+>
+> Because the API supports uploading a community logo using the `Logo` field.
+
+---
+
+# 📥 Form Data
+
+| Field         | Type        | Required | Description                        |
+| ------------- | ----------- | -------- | ---------------------------------- |
+| CommunityName | String      | ✅       | Official community name            |
+| password      | String      | ✅       | Account password                   |
+| Bio           | String      | ✅       | Community description              |
+| City          | String      | ✅       | Community city                     |
+| Country       | String      | ✅       | Country                            |
+| ContactPhone  | String      | ✅       | Official phone number              |
+| OfficialEmail | String      | ✅       | Community email (must be unique)   |
+| Website       | String      | ❌       | Official website                   |
+| Logo          | File        | ❌       | Community logo image               |
+| LogoUrl       | String      | ❌       | Used when no Logo file is uploaded |
+| socialLinks   | JSON/String | ❌       | Social media links                 |
+
+---
+
+# Example Request
+
+```json
+{
+  "CommunityName": "GDG Ranchi",
+  "password": "StrongPassword@123",
+  "Bio": "GDG Ranchi is a group of developers that foster the learning of Google's developer technologies. We are a local community-run meetup for developers interested in Google technologies, AI, Android, Web, Cloud, Flutter, Firebase, Open Source, and community-driven learning. Membership is free and open to everyone passionate about technology.",
+  "City": "Ranchi",
+  "Country": "India",
+  "ContactPhone": "9876543210",
+  "OfficialEmail": "hello@gdgranchi.dev",
+  "Website": "https://gdg.community.dev/gdg-ranchi/",
+  "LogoUrl": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500",
+  "socialLinks": {
+    "linkedin": "https://www.linkedin.com/company/gdgrnc/",
+    "github": "https://github.com/gdg-ranchi",
+    "twitter": "https://twitter.com/gdgranchi",
+    "instagram": "https://instagram.com/gdgranchi",
+    "youtube": "https://youtube.com/@gdgranchi",
+    "discord": "https://discord.gg/gdgranchi"
+  }
+}
+```
+
+---
+
+# 🔍 Field Validation (Strict)
+
+## CommunityName
+
+- Required
+- Minimum 3 characters
+- Maximum 100 characters
+- Must be unique enough to generate a slug
+
+Example
+
+```text
+GDG Ranchi
+```
+
+---
+
+## Password
+
+Must satisfy:
+
+- Required
+- Minimum 8 characters
+- At least one uppercase letter
+- At least one lowercase letter
+- At least one number
+- At least one special character
+
+Example
+
+```text
+StrongPassword@123
+```
+
+---
+
+## Bio
+
+- Required
+- Minimum 30 characters
+- Maximum 1000 characters
+
+Example
+
+```text
+GDG Ranchi is a local developer community focused on learning, collaboration, Google technologies, hackathons, workshops, AI, Flutter, Cloud, and Open Source.
+```
+
+---
+
+## City
+
+Required
+
+Example
+
+```text
+Ranchi
+```
+
+---
+
+## Country
+
+Required
+
+Example
+
+```text
+India
+```
+
+---
+
+## ContactPhone
+
+- Required
+- Valid mobile number
+
+Example
+
+```text
+9876543210
+```
+
+---
+
+## OfficialEmail
+
+- Required
+- Must be valid email
+- Must not already exist
+
+Example
+
+```text
+hello@gdgranchi.dev
+```
+
+---
+
+## Website
+
+Optional
+
+Must be a valid URL.
+
+Example
+
+```text
+https://gdg.community.dev/gdg-ranchi/
+```
+
+---
+
+## Logo
+
+Optional
+
+Accepted formats
+
+```
+PNG
+JPG
+JPEG
+WEBP
+SVG
+```
+
+---
+
+## LogoUrl
+
+Optional
+
+Used only if Logo file is not uploaded.
+
+---
+
+## socialLinks
+
+Optional object.
+
+Supported properties
+
+```json
+{
+  "github": "",
+  "linkedin": "",
+  "twitter": "",
+  "instagram": "",
+  "youtube": "",
+  "discord": ""
+}
+```
+
+Each value must be a valid URL.
+
+---
+
+# ⚠️ Pre-Conditions (Must Pass)
+
+Before creating the community, the following validations are performed:
+
+- Official email must not already exist.
+- Password must pass validation.
+- Community name must be provided.
+- Required fields cannot be empty.
+- Logo upload must succeed (if provided).
+- Organization account must be successfully created.
+- Community profile creation must succeed.
+- Default organization permissions must be assigned.
+
+If any step fails, the operation is aborted.
+
+---
+
+# 🔄 Backend Workflow
+
+```text
+Client
+      │
+      ▼
+Validate Request
+      │
+      ▼
+Check Existing Email
+      │
+      ▼
+Upload Logo (Optional)
+      │
+      ▼
+Create Auth Account
+      │
+      ▼
+Generate Community Slug
+      │
+      ▼
+Create Community
+      │
+      ▼
+Assign Organization Permissions
+      │
+      ▼
+Return Success Response
+```
+
+---
+
+# 📤 Success Response
+
+**HTTP 201 Created**
+
+```json
+{
+  "success": true,
+  "message": "Community account created successfully.",
+  "data": {
+    "_id": "686cf4a2bdf02d0f2bbd1234",
+    "CommunityName": "GDG Ranchi",
+    "Slug": "gdg-ranchi-8af2dbe7",
+    "OfficialEmail": "hello@gdgranchi.dev",
+    "City": "Ranchi",
+    "Country": "India",
+    "Status": "pending",
+    "LogoUrl": "https://res.cloudinary.com/demo/image/upload/community.png",
+    "Members": ["686cf4a2bdf02d0f2bbd1111"]
+  }
+}
+```
+
+---
+
+# ❌ Error Responses
+
+## Email Already Exists
+
+**HTTP 409**
+
+```json
+{
+  "success": false,
+  "message": "User already exists"
+}
+```
+
+---
+
+## Validation Failed
+
+**HTTP 400**
+
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "OfficialEmail",
+      "message": "Invalid email address"
+    }
+  ]
+}
+```
+
+---
+
+## Logo Upload Failed
+
+```json
+{
+  "success": false,
+  "message": "Unable to upload community logo."
+}
+```
+
+---
+
+## Internal Server Error
+
+**HTTP 500**
+
+```json
+{
+  "success": false,
+  "message": "An error occurred"
+}
+```
+
+---
+
+# 🔐 Default Community State
+
+Immediately after successful registration:
+
+| Property              | Value                            |
+| --------------------- | -------------------------------- |
+| Role                  | ORGANIZATION                     |
+| Email Verified        | false                            |
+| Community Status      | pending                          |
+| Failed Login Attempts | 0                                |
+| Is Banned             | false                            |
+| Permissions           | Default Organization Permissions |
+| Slug                  | Auto Generated                   |
+| Owner                 | Auth Account                     |
+| Members               | Owner Added Automatically        |
+
+---
+
+# 📌 Notes
+
+- The creator automatically becomes the **Owner** of the community.
+- The owner is automatically added to the community members list.
+- A unique, SEO-friendly slug is generated using the community name and a UUID.
+- If a logo file is uploaded, it is stored in Cloudinary.
+- If no logo is uploaded, the API uses the provided `LogoUrl`, or falls back to a default placeholder image.
+- Newly registered communities remain in **Pending** status until reviewed or approved by the platform administrators.
+- Organization-specific permissions are automatically assigned after successful registration.
+
 # 🚀 PARTICIPANT CREATION ENTRY POINT
 
 ---

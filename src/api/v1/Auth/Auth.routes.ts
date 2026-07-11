@@ -6,6 +6,10 @@ const router = Router();
 
 router.post("/auth/login", AuthController.LoginUser);
 
+router.post("/auth/forgot-password", AuthController.ForgotPassword);
+
+router.post("/auth/change-password", AuthController.changePassword);
+
 router.post(
   "/auth/community-signup",
   upload.single("Logo"),

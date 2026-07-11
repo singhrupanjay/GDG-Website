@@ -11,10 +11,7 @@ import { permissionService } from "../Permission/Permission.service";
 import { memberPermission } from "../Permission/Permission.constant";
 
 import slugify from "slugify";
-import EmailUtils from "../../../utils/Email.utils";
 import MemberChannel from "./Member.Channel";
-
-// import { memberPermission } from "../Permission/Permission.constant";
 
 class MemberController {
   createNewMember = async (req: Request, res: Response) => {
@@ -102,8 +99,6 @@ class MemberController {
         imageUrl:
           imageUrl ??
           "https://img.freepik.com/premium-vector/boy-with-sweater-that-says-hes-boy_1230457-43137.jpg?w=360",
-
-  
 
         AuthId: auth._id.toString(),
 
