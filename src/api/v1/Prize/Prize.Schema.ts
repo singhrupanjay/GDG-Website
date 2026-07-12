@@ -8,6 +8,11 @@ export const PrizeSchema = new Schema(
       trim: true,
     },
 
+    description: {
+      type: String,
+      default: "",
+    },
+
     amount: {
       type: Number,
       required: true,
@@ -17,17 +22,6 @@ export const PrizeSchema = new Schema(
     currency: {
       type: String,
       default: "INR",
-    },
-
-    sponsorPartnerId: {
-      type: Schema.Types.ObjectId,
-      ref: "Partner",
-      default: null,
-    },
-
-    criteria: {
-      type: String,
-      default: "",
     },
   },
   { _id: true },

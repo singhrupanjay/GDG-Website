@@ -32,32 +32,8 @@ export const TicketSchema = new Schema(
       uppercase: true,
     },
 
-    quantity: {
-      type: Number,
-      default: null,
-      min: 0,
-    },
 
-    soldCount: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-
-    maxPerUser: {
-      type: Number,
-      default: 1,
-      min: 1,
-    },
-
-    registrationStartAt: {
-      type: Date,
-    },
-
-    registrationEndAt: {
-      type: Date,
-    },
-
+  
     isActive: {
       type: Boolean,
       default: true,

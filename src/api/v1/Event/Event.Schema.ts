@@ -1,74 +1,11 @@
 import { Schema, Types, model } from "mongoose";
 import { EventStatus, EventVisibility, RewardType } from "./event.type";
-import { ROLE_CONSTANT } from "../Auth/Auth.Constant";
+
 import { TimelineSchema } from "../Timeline/Timeline..Schema";
 import { VenueSchema } from "../Venue/Venue.Schema";
 import { TicketSchema } from "../Ticket/Ticket.Schema";
 import { PrizeSchema } from "../Prize/Prize.Schema";
-import { Roles } from "../Member/Role.constant";
 
-const SeoSchema = new Schema(
-  {
-    metaTitle: {
-      type: String,
-      trim: true,
-      maxlength: 70,
-    },
-
-    metaDescription: {
-      type: String,
-      trim: true,
-      maxlength: 170,
-    },
-
-    keywords: {
-      type: [String],
-      default: [],
-    },
-
-    slug: {
-      type: String,
-      required: true,
-      lowercase: true,
-      trim: true,
-      unique: true,
-      index: true,
-    },
-  },
-  { _id: false },
-);
-
-const SponsorRewardSchema = new Schema(
-  {
-    sponsorPartnerId: {
-      type: Types.ObjectId,
-      ref: "Partner",
-      required: true,
-    },
-
-    rewardType: {
-      type: String,
-      enum: Object.values(RewardType),
-      required: true,
-    },
-
-    title: {
-      type: String,
-      required: true,
-    },
-
-    amount: {
-      type: Number,
-      default: 0,
-    },
-
-    note: {
-      type: String,
-      default: "",
-    },
-  },
-  { _id: true },
-);
 
 const EventSchema = new Schema(
   {
@@ -108,13 +45,6 @@ const EventSchema = new Schema(
       index: "text",
     },
 
-    subtitle: {
-      type: String,
-      trim: true,
-      maxlength: 220,
-      default: "",
-    },
-
     shortDescription: {
       type: String,
       trim: true,
@@ -127,9 +57,9 @@ const EventSchema = new Schema(
       required: true,
     },
 
-    seo: {
-      type: SeoSchema,
-      required: true,
+    redirectUrl: {
+      type: String,
+      default: "",
     },
 
     tags: {
@@ -173,16 +103,6 @@ const EventSchema = new Schema(
       default: "",
     },
 
-    bannerImageUrl: {
-      type: String,
-      default: "",
-    },
-
-    thumbnailUrl: {
-      type: String,
-      default: "",
-    },
-
     introVideoUrl: {
       type: String,
       default: "",
@@ -191,23 +111,6 @@ const EventSchema = new Schema(
     /* -------------------------------------------------------------------------- */
     /*                                  SCHEDULE                                  */
     /* -------------------------------------------------------------------------- */
-
-    timezone: {
-      type: String,
-      default: "Asia/Kolkata",
-    },
-
-    startAt: {
-      type: Date,
-      required: true,
-      index: true,
-    },
-
-    endAt: {
-      type: Date,
-      required: true,
-      index: true,
-    },
 
     registrationStartAt: {
       type: Date,
@@ -228,21 +131,7 @@ const EventSchema = new Schema(
       required: true,
     },
 
-    /* -------------------------------------------------------------------------- */
-    /*                                 EVENT TEAM                                 */
-    /* -------------------------------------------------------------------------- */
-
-    organizers: {
-      type: [Types.ObjectId],
-      ref: "Member",
-      default: [],
-    },
-
-    speakers: {
-      type: [Types.ObjectId],
-      ref: "Member",
-      default: [],
-    },
+   
 
     mentors: {
       type: [Types.ObjectId],
@@ -256,17 +145,7 @@ const EventSchema = new Schema(
       default: [],
     },
 
-    hosts: {
-      type: [Types.ObjectId],
-      ref: "Member",
-      default: [],
-    },
-
-    volunteers: {
-      type: [Types.ObjectId],
-      ref: "Member",
-      default: [],
-    },
+  
 
     /* -------------------------------------------------------------------------- */
     /*                             PARTNERS & SPONSORS                            */
@@ -293,41 +172,7 @@ const EventSchema = new Schema(
       default: [],
     },
 
-    /* -------------------------------------------------------------------------- */
-    /*                              PRIZES & REWARDS                              */
-    /* -------------------------------------------------------------------------- */
-
-    pricing: {
-      totalBudget: {
-        type: Number,
-        default: 0,
-      },
-
-      totalPrizePool: {
-        type: Number,
-        default: 0,
-      },
-
-      mainPrizes: {
-        type: [PrizeSchema],
-        default: [],
-      },
-
-      trackPrizes: {
-        type: [PrizeSchema],
-        default: [],
-      },
-
-      specialPrizes: {
-        type: [PrizeSchema],
-        default: [],
-      },
-
-      sponsorRewards: {
-        type: [SponsorRewardSchema],
-        default: [],
-      },
-    },
+  
 
     /* -------------------------------------------------------------------------- */
     /*                               EVENT CONTENT                                */
@@ -338,10 +183,7 @@ const EventSchema = new Schema(
       default: [],
     },
 
-    faqs: {
-      type: [FAQSchema],
-      default: [],
-    },
+   
 
     rules: {
       type: [String],
@@ -368,20 +210,8 @@ const EventSchema = new Schema(
         default: false,
       },
 
-      requireApproval: {
-        type: Boolean,
-        default: false,
-      },
+ 
 
-      enableWaitlist: {
-        type: Boolean,
-        default: true,
-      },
-
-      allowTeamRegistration: {
-        type: Boolean,
-        default: false,
-      },
 
       allowCancellation: {
         type: Boolean,
@@ -394,91 +224,8 @@ const EventSchema = new Schema(
       },
     },
 
-    /* -------------------------------------------------------------------------- */
-    /*                                  ANALYTICS                                 */
-    /* -------------------------------------------------------------------------- */
-
-    analytics: {
-      viewsCount: {
-        type: Number,
-        default: 0,
-      },
-
-      uniqueViewsCount: {
-        type: Number,
-        default: 0,
-      },
-
-      registrationsCount: {
-        type: Number,
-        default: 0,
-      },
-
-      attendeesCount: {
-        type: Number,
-        default: 0,
-      },
-
-      teamsCount: {
-        type: Number,
-        default: 0,
-      },
-
-      submissionsCount: {
-        type: Number,
-        default: 0,
-      },
-
-      likesCount: {
-        type: Number,
-        default: 0,
-      },
-
-      sharesCount: {
-        type: Number,
-        default: 0,
-      },
-    },
-
-    /* -------------------------------------------------------------------------- */
-    /*                                 MODERATION                                 */
-    /* -------------------------------------------------------------------------- */
-
-    moderation: {
-      isVerified: {
-        type: Boolean,
-        default: false,
-      },
-
-      verifiedBy: {
-        type: Types.ObjectId,
-        ref: "User",
-      },
-
-      verifiedAt: {
-        type: Date,
-      },
-
-      moderationNote: {
-        type: String,
-        default: "",
-      },
-    },
-
-    /* -------------------------------------------------------------------------- */
-    /*                                SOFT DELETE                                 */
-    /* -------------------------------------------------------------------------- */
-
-    isDeleted: {
-      type: Boolean,
-      default: false,
-      index: true,
-    },
-
-    deletedAt: {
-      type: Date,
-      default: null,
-    },
+ 
+   
   },
   {
     timestamps: true,
@@ -486,56 +233,6 @@ const EventSchema = new Schema(
   },
 );
 
-EventSchema.index({
-  title: "text",
-  subtitle: "text",
-  shortDescription: "text",
-  tags: "text",
-});
 
-EventSchema.index({
-  communityId: 1,
-  status: 1,
-  startAt: 1,
-});
-
-EventSchema.index({
-  category: 1,
-  eventType: 1,
-  visibility: 1,
-});
-
-EventSchema.index({
-  "venue.geo": "2dsphere",
-});
-
-EventSchema.index({
-  createdAt: -1,
-});
-
-EventSchema.index({
-  registrationEndAt: 1,
-});
-
-EventSchema.index({
-  isDeleted: 1,
-  status: 1,
-});
-
-/* -------------------------------------------------------------------------- */
-/*                                MIDDLEWARES                                 */
-/* -------------------------------------------------------------------------- */
-
-EventSchema.pre("save", function (next: any) {
-  if (this.endAt < this.startAt) {
-    throw new Error("End date cannot be before start date");
-  }
-
-  next();
-});
-
-/* -------------------------------------------------------------------------- */
-/*                                   EXPORT                                   */
-/* -------------------------------------------------------------------------- */
 
 export const EventModel = model("Event", EventSchema);
