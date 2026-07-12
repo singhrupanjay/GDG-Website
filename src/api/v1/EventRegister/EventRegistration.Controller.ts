@@ -44,5 +44,4 @@ class EventRegistrationController {
   }
 }
 
-
 export default new EventRegistrationController();
