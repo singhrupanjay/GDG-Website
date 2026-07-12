@@ -253,7 +253,7 @@ class AuthController {
 
   public changePassword = async (req: Request, res: Response) => {
     let { email } = req.query;
-      let { newPassword, confirmPassword, otp } = req.body;
+    let { newPassword, confirmPassword, otp } = req.body;
 
     try {
       let AuthUser = await memberUtils.FIND_Member_BY_EMAIL(String(email));
@@ -262,16 +262,11 @@ class AuthController {
         throw new Error(AuthConstant.USER_NOT_FOUND);
       }
 
-
-        if (newPassword !== confirmPassword) {
+      if (newPassword !== confirmPassword) {
         throw new Error("New password and confirm password do not match.");
       }
 
-
-  // Validate the OTP for password reset using zod 
-
-
-  
+      // Validate the OTP for password reset using zod
 
       let isOtpValid = await otpUtils.verifyOTP(
         String(email),
@@ -286,8 +281,6 @@ class AuthController {
       }
 
       // delte otp if more that 5 attempts are made
-
-    
 
       let hashedPassword = await authUtils.hashPassword(newPassword);
 

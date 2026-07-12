@@ -11,6 +11,7 @@ app.listen(env_Constant.PORT, async () => {
     await connectRabbitMQ();
 
     await RabitMQ_Global_Consumer();
+
     console.log(`Server is running on port ${env_Constant.PORT}`);
   } catch (error) {
     console.error("Error starting the server:", error);

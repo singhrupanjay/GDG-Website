@@ -5,7 +5,6 @@ import { TimelineSchema } from "../Timeline/Timeline..Schema";
 import { VenueSchema } from "../Venue/Venue.Schema";
 import { TicketSchema } from "../Ticket/Ticket.Schema";
 import { PrizeSchema } from "../Prize/Prize.Schema";
-import { FAQSchema } from "../FAQ/FAQ.Schema";
 import { Roles } from "../Member/Role.constant";
 
 const SeoSchema = new Schema(
