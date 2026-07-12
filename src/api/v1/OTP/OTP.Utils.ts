@@ -12,12 +12,18 @@ class OtpUtils {
   };
 
   verifyOTP = async (email: string, otp: string, otpType: OTPType) => {
-    console.log("Verifying OTP for email:", email, "OTP:", otp, "Type:", otpType);
+    console.log(
+      "Verifying OTP for email:",
+      email,
+      "OTP:",
+      otp,
+      "Type:",
+      otpType,
+    );
     const isValid = await OTP.findOne({
       email: email,
       otp: otp,
       type: otpType,
-    
     });
     console.log("OTP verification result:-->", isValid);
     return isValid;
