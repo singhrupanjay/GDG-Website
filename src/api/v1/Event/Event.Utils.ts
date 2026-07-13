@@ -1,91 +1,111 @@
 import { EventModel } from "./Event.Schema";
+import { EventVisibility } from "./event.type";
 
 class EventUtils {
-  FindEventById = async (eventId: string) => {
+  async FindEventById(eventId: string) {
     const event = await EventModel.findById(eventId);
+
     if (!event) {
       throw new Error("Event not found");
     }
+
     return event;
-  };
+  }
 
-  FIND_PAST_EVENTS = async () => {
-    const currentDate = new Date();
+  async FIND_UPCOMING_EVENTS() {
+    const now = new Date();
 
     return await EventModel.find({
-      VISIBILITY: "PUBLIC",
+      visibility: EventVisibility.PUBLIC,
+      registrationStartAt: {
+        $gt: now,
+      },
+    })
+      .sort({ registrationStartAt: 1 })
+      .select(
+        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
+      )
+      .lean();
+  }
+
+  async FIND_REGISTRATION_OPEN_EVENTS() {
+    const now = new Date();
+
+    return await EventModel.find({
+      visibility: EventVisibility.PUBLIC,
+      registrationStartAt: {
+        $lte: now,
+      },
+      registrationEndAt: {
+        $gte: now,
+      },
+    })
+      .sort({ registrationStartAt: 1 })
+      .select(
+        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
+      )
+      .lean();
+  }
+
+  async FIND_REGISTRATION_CLOSED_EVENTS() {
+    const now = new Date();
+
+    return await EventModel.find({
+      visibility: EventVisibility.PUBLIC,
+      registrationEndAt: {
+        $lt: now,
+      },
+    })
+      .sort({ registrationEndAt: -1 })
+      .select(
+        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
+      )
+      .lean();
+  }
+
+  async FIND_ONGOING_EVENTS() {
+    const now = new Date();
+
+    return await EventModel.find({
+      visibility: EventVisibility.PUBLIC,
       timeline: {
         $elemMatch: {
-          title: "Event",
-          endAt: { $lt: currentDate },
+          title: "Hackathon Begins",
+          startAt: {
+            $lte: now,
+          },
+          endAt: {
+            $gte: now,
+          },
         },
       },
     })
-      .select("coverImageUrl title shortDescription redirectUrl tags timeline")
+      .select(
+        "coverImageUrl title shortDescription redirectUrl tags timeline",
+      )
       .lean();
-  };
+  }
 
-  FIND_UPCOMING_EVENTS = async () => {
-    const currentDate = new Date();
+  async FIND_PAST_EVENTS() {
+    const now = new Date();
 
     return await EventModel.find({
-      VISIBILITY: "PUBLIC",
+      visibility: EventVisibility.PUBLIC,
       timeline: {
         $elemMatch: {
-          title: "Event",
-          startAt: { $gt: currentDate },
+          title: "Hackathon Begins",
+          endAt: {
+            $lt: now,
+          },
         },
       },
     })
-      .select("coverImageUrl title shortDescription redirectUrl tags timeline")
+      .sort({ updatedAt: -1 })
+      .select(
+        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
+      )
       .lean();
-  };
-
-  FIND_ONGOING_EVENTS = async () => {
-    const currentDate = new Date();
-
-    return await EventModel.find({
-      VISIBILITY: "PUBLIC",
-      timeline: {
-        $elemMatch: {
-          title: "Event",
-          startAt: { $lte: currentDate },
-          endAt: { $gte: currentDate },
-        },
-      },
-    })
-      .select("coverImageUrl title shortDescription redirectUrl tags timeline")
-      .lean();
-  };
-
-  FIND_REGISTRATION_OPEN_EVENTS = async () => {
-    const currentDate = new Date();
-
-    return await EventModel.find({
-      VISIBILITY: "PUBLIC",
-      timeline: {
-        $elemMatch: {
-          title: "Registration",
-          startAt: { $lte: currentDate },
-          endAt: { $gte: currentDate },
-        },
-      },
-    }).lean();
-  };
-
-  FIND_REGISTRATION_CLOSED_EVENTS = async () => {
-    const currentDate = new Date();
-
-    return await EventModel.find({
-      VISIBILITY: "PUBLIC",
-      timeline: {
-        $elemMatch: {
-          title: "Registration",
-          endAt: { $lt: currentDate },
-        },
-      },
-    }).lean();
-  };
+  }
 }
 
 export const eventUtils = new EventUtils();
