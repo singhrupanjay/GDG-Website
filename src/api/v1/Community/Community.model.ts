@@ -22,7 +22,7 @@ const communitySchema = new Schema<CommunitySchema>({
 
   SocialLinks: {
     github: { type: String },
-    discord: { type: String },
+    WhatsApp: { type: String },
     twitter: { type: String },
     linkedin: { type: String },
     youtube: { type: String },
