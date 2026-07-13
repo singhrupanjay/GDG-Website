@@ -12,6 +12,13 @@ const EventSchema = new Schema(
     /*                             SYSTEM INFORMATION                              */
     /* -------------------------------------------------------------------------- */
 
+    Slug: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+
     communityId: {
       type: Types.ObjectId,
       ref: "Community",
