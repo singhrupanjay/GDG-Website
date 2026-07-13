@@ -11,28 +11,80 @@ class EventUtils {
 
   FIND_PAST_EVENTS = async () => {
     const currentDate = new Date();
-    const pastEvents = await EventModel.find({
+
+    return await EventModel.find({
       VISIBILITY: "PUBLIC",
-      endDate: { $lt: currentDate },
+      timeline: {
+        $elemMatch: {
+          title: "Event",
+          endAt: { $lt: currentDate },
+        },
+      },
     })
-      .select(
-        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
-      )
+      .select("coverImageUrl title shortDescription redirectUrl tags timeline")
       .lean();
-    return pastEvents;
   };
 
   FIND_UPCOMING_EVENTS = async () => {
     const currentDate = new Date();
-    const upcomingEvents = await EventModel.find({
+
+    return await EventModel.find({
       VISIBILITY: "PUBLIC",
-      registrationStartAt: { $gt: currentDate },
+      timeline: {
+        $elemMatch: {
+          title: "Event",
+          startAt: { $gt: currentDate },
+        },
+      },
     })
-      .select(
-        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
-      )
+      .select("coverImageUrl title shortDescription redirectUrl tags timeline")
       .lean();
-    return upcomingEvents;
+  };
+
+  FIND_ONGOING_EVENTS = async () => {
+    const currentDate = new Date();
+
+    return await EventModel.find({
+      VISIBILITY: "PUBLIC",
+      timeline: {
+        $elemMatch: {
+          title: "Event",
+          startAt: { $lte: currentDate },
+          endAt: { $gte: currentDate },
+        },
+      },
+    })
+      .select("coverImageUrl title shortDescription redirectUrl tags timeline")
+      .lean();
+  };
+
+  FIND_REGISTRATION_OPEN_EVENTS = async () => {
+    const currentDate = new Date();
+
+    return await EventModel.find({
+      VISIBILITY: "PUBLIC",
+      timeline: {
+        $elemMatch: {
+          title: "Registration",
+          startAt: { $lte: currentDate },
+          endAt: { $gte: currentDate },
+        },
+      },
+    }).lean();
+  };
+
+  FIND_REGISTRATION_CLOSED_EVENTS = async () => {
+    const currentDate = new Date();
+
+    return await EventModel.find({
+      VISIBILITY: "PUBLIC",
+      timeline: {
+        $elemMatch: {
+          title: "Registration",
+          endAt: { $lt: currentDate },
+        },
+      },
+    }).lean();
   };
 }
 

@@ -39,66 +39,106 @@ Content-Type: application/json
 
 ```json
 {
-  "communityId": "688dfe73a4cbad124cdb3d20",
-  "title": "Google Cloud Study Jam 2027",
-  "shortDescription": "Hands-on workshop on Google Cloud.",
-  "descriptionMarkdown": "# Welcome\nLearn Google Cloud from experts.",
-  "redirectUrl": "https://gdg.community.dev",
+  "communityId": "6a5515e619178aff73262707",
+  "title": "Ranchi Hacks 2027",
+  "shortDescription": "48-hour national hackathon to build innovative solutions using AI, Web, Cloud, and Open Source technologies.",
+  "descriptionMarkdown": "# 🚀 Welcome to Ranchi Hacks 2027\n\nRanchi Hacks is Jharkhand's flagship community-driven hackathon where students, developers, designers, and innovators collaborate to solve real-world problems.\n\n## What to Expect\n- 💻 48 Hours of Coding\n- 🤖 AI & Machine Learning\n- ☁️ Google Cloud & Firebase\n- 🌐 Full Stack Development\n- 📱 Mobile App Development\n- 🎮 Open Innovation Challenges\n- 🎤 Mentor Sessions\n- 🏆 Exciting Prizes & Swags\n- 🤝 Networking with Industry Experts\n\nWhether you're a beginner or an experienced developer, Ranchi Hacks provides the perfect platform to learn, build, and showcase your innovation.",
+  "redirectUrl": "https://ranchihacks.dev",
   "tags": [
+    "Hackathon",
+    "AI",
+    "Web",
     "Cloud",
-    "GCP",
-    "Google"
+    "Open Source",
+    "Flutter",
+    "Firebase",
+    "Google Cloud",
+    "Innovation",
+    "Startup"
   ],
-  "category": "Workshop",
+  "category": "Hackathon",
   "visibility": "PUBLIC",
   "status": "REGISTRATION_OPEN",
-  "coverImageUrl": "https://cdn.commdesk.com/events/cloud-cover.jpg",
-  "introVideoUrl": "https://youtube.com/watch?v=abcdef",
-  "registrationStartAt": "2027-08-20T09:00:00Z",
-  "registrationEndAt": "2027-08-30T18:00:00Z",
+  "coverImageUrl": "https://res.cloudinary.com/startup-grind/image/upload/c_scale,w_2560/c_crop,h_640,w_2560,y_0.0_mul_h_sub_0.0_mul_640/c_crop,h_640,w_2560/c_fill,dpr_2.0,f_auto,g_center,q_auto:good/v1/gcs/platform-data-goog/event_banners/ranchi%20hacks%20bevy_U4ksO2S.png",
+  "introVideoUrl": "https://www.youtube.com/embed/DW8x5-Pc5NI?si=ZxDKeDjy3NPfqhze",
+  "registrationStartAt": "2027-09-01T09:00:00Z",
+  "registrationEndAt": "2027-09-25T23:59:59Z",
   "venue": {
     "mode": "OFFLINE",
-    "venueName": "Ranchi University",
-    "address": "Main Campus",
+    "venueName": "BIT Mesra",
+    "address": "BIT Mesra Campus",
     "city": "Ranchi",
     "state": "Jharkhand",
     "country": "India",
-    "latitude": 23.344,
-    "longitude": 85.309
+    "latitude": 23.4165,
+    "longitude": 85.4406
   },
-  "mentors": [
-    "688a11111111111111111111",
-    "688a22222222222222222222"
-  ],
-  "judges": [
-    "688a33333333333333333333"
-  ],
-  "partners": [
-    "688b44444444444444444444"
-  ],
-  "sponsors": [
-    "688b55555555555555555555"
-  ],
-  "tickets": [
-    {
-      "name": "General Admission",
-      "price": 0,
-      "quantity": 300
-    }
-  ],
   "timeline": [
     {
-      "title": "Registration",
-      "startTime": "2027-08-20T09:00:00Z",
-      "endTime": "2027-08-20T10:00:00Z"
+      "title": "Registration Opens",
+      "startAt": "2027-09-01T09:00:00Z",
+      "endAt": "2027-09-25T23:59:59Z"
+    },
+    {
+      "title": "Shortlisting Announcement",
+      "startAt": "2027-09-28T18:00:00Z",
+      "endAt": "2027-09-28T19:00:00Z"
+    },
+    {
+      "title": "Participant Check-in",
+      "startAt": "2027-10-01T08:00:00Z",
+      "endAt": "2027-10-01T09:30:00Z"
+    },
+    {
+      "title": "Opening Ceremony",
+      "startAt": "2027-10-01T10:00:00Z",
+      "endAt": "2027-10-01T11:00:00Z"
+    },
+    {
+      "title": "Hackathon Begins",
+      "startAt": "2027-10-01T11:00:00Z",
+      "endAt": "2027-10-03T11:00:00Z"
+    },
+    {
+      "title": "Mentoring Sessions",
+      "startAt": "2027-10-02T10:00:00Z",
+      "endAt": "2027-10-02T18:00:00Z"
+    },
+    {
+      "title": "Project Submission Deadline",
+      "startAt": "2027-10-03T11:00:00Z",
+      "endAt": "2027-10-03T11:30:00Z"
+    },
+    {
+      "title": "Final Demo & Judging",
+      "startAt": "2027-10-03T12:00:00Z",
+      "endAt": "2027-10-03T16:00:00Z"
+    },
+    {
+      "title": "Closing Ceremony & Prize Distribution",
+      "startAt": "2027-10-03T17:00:00Z",
+      "endAt": "2027-10-03T18:30:00Z"
     }
   ],
   "rules": [
-    "Carry ID Card",
-    "Laptop Required"
+    "Each team must have 2 to 5 members.",
+    "Participants must carry a valid college or government-issued ID.",
+    "All code must be developed during the hackathon.",
+    "Use of open-source libraries is permitted.",
+    "Plagiarism or copied projects will result in immediate disqualification.",
+    "Projects submitted after the deadline will not be evaluated.",
+    "Participants are responsible for their own laptops and chargers.",
+    "Teams must follow the event code of conduct.",
+    "Judges' decisions will be final and binding.",
+    "Internet access will be provided throughout the event."
   ],
   "requirements": [
-    "Basic Programming Knowledge"
+    "Laptop with charger",
+    "Government or College ID Card",
+    "Basic knowledge of programming",
+    "Git & GitHub account",
+    "Team of 2-5 members",
+    "Enthusiasm to build innovative solutions"
   ]
 }
 ```
@@ -144,13 +184,13 @@ Content-Type: application/json
 
 ## Business Rules
 
-* Community must exist.
-* User must belong to the community.
-* Only Organizer/Admin can create events.
-* Registration end date must be after start date.
-* Event title should be unique within the same community.
-* Maximum 20 tags.
-* Maximum 50 timeline entries.
+- Community must exist.
+- User must belong to the community.
+- Only Organizer/Admin can create events.
+- Registration end date must be after start date.
+- Event title should be unique within the same community.
+- Maximum 20 tags.
+- Maximum 50 timeline entries.
 
 ---
 
@@ -158,22 +198,22 @@ Content-Type: application/json
 
 ```json
 {
-    "success": false,
-    "message": "Community not found."
+  "success": false,
+  "message": "Community not found."
 }
 ```
 
 ```json
 {
-    "success": false,
-    "message": "You don't have permission to create events."
+  "success": false,
+  "message": "You don't have permission to create events."
 }
 ```
 
 ```json
 {
-    "success": false,
-    "message": "Registration end date must be after registration start date."
+  "success": false,
+  "message": "Registration end date must be after registration start date."
 }
 ```
 
@@ -205,10 +245,7 @@ GET /api/v1/events/6890dc2a44fd9d6db4dcb812
     "category": "Workshop",
     "visibility": "PUBLIC",
     "status": "REGISTRATION_OPEN",
-    "tags": [
-      "Cloud",
-      "Google"
-    ],
+    "tags": ["Cloud", "Google"],
     "community": {
       "_id": "688dfe73a4cbad124cdb3d20",
       "CommunityName": "GDG Ranchi"
@@ -229,11 +266,11 @@ GET /api/v1/events/6890dc2a44fd9d6db4dcb812
 
 Populate
 
-* Community
-* Mentors
-* Judges
-* Sponsors
-* Partners
+- Community
+- Mentors
+- Judges
+- Sponsors
+- Partners
 
 ---
 
@@ -296,8 +333,8 @@ GET /api/v1/events/upcoming
 
 Returns
 
-* Registration Open
-* Future Events
+- Registration Open
+- Future Events
 
 ---
 
@@ -333,8 +370,8 @@ Example Request
 
 ```json
 {
-    "title":"Updated Cloud Study Jam",
-    "shortDescription":"Updated description"
+  "title": "Updated Cloud Study Jam",
+  "shortDescription": "Updated description"
 }
 ```
 
@@ -342,8 +379,8 @@ Response
 
 ```json
 {
-    "success":true,
-    "message":"Event updated successfully."
+  "success": true,
+  "message": "Event updated successfully."
 }
 ```
 
@@ -376,7 +413,7 @@ Request
 
 ```json
 {
-    "reason":"Venue unavailable due to maintenance."
+  "reason": "Venue unavailable due to maintenance."
 }
 ```
 
@@ -384,8 +421,8 @@ Response
 
 ```json
 {
-    "success":true,
-    "message":"Event cancelled successfully."
+  "success": true,
+  "message": "Event cancelled successfully."
 }
 ```
 
@@ -413,8 +450,8 @@ Response
 
 ```json
 {
-    "success":true,
-    "message":"Event deleted successfully."
+  "success": true,
+  "message": "Event deleted successfully."
 }
 ```
 
@@ -428,19 +465,19 @@ POST /api/v1/events/:eventId/clone
 
 Copies
 
-* Basic Information
-* Venue
-* Timeline
-* Tickets
-* Rules
-* Requirements
+- Basic Information
+- Venue
+- Timeline
+- Tickets
+- Rules
+- Requirements
 
 Does not copy
 
-* Registrations
-* Analytics
-* Attendance
-* Check-ins
+- Registrations
+- Analytics
+- Attendance
+- Check-ins
 
 ---
 
@@ -477,12 +514,12 @@ GET /api/v1/events/:eventId/stats
 
 Returns
 
-* Total Registrations
-* Ticket Sales
-* Attendance Rate
-* Check-ins
-* Views
-* Bookmarks
+- Total Registrations
+- Ticket Sales
+- Attendance Rate
+- Check-ins
+- Views
+- Bookmarks
 
 ---
 
