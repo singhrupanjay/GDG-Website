@@ -14,7 +14,7 @@ export type CommunitySchema = {
 
   SocialLinks: {
     github?: string;
-    discord?: string;
+    WhatsApp?: string;
     twitter?: string;
     linkedin?: string;
     youtube?: string;

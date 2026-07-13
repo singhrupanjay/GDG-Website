@@ -39,7 +39,7 @@ export const CreateOrganizerZodSchema = z.object({
 
   SocialLinks: z.object({
     github: z.string().url().optional(),
-    discord: z.string().url().optional(),
+    WhatsApp: z.string().url().optional(),
     twitter: z.string().url().optional(),
     linkedin: z.string().url().optional(),
     youtube: z.string().url().optional(),

@@ -6,7 +6,6 @@ import { VenueSchema } from "../Venue/Venue.Schema";
 import { TicketSchema } from "../Ticket/Ticket.Schema";
 import { PrizeSchema } from "../Prize/Prize.Schema";
 
-
 const EventSchema = new Schema(
   {
     /* -------------------------------------------------------------------------- */
@@ -74,12 +73,6 @@ const EventSchema = new Schema(
       index: true,
     },
 
-    eventType: {
-      type: String,
-      required: true,
-      index: true,
-    },
-
     visibility: {
       type: String,
       enum: Object.values(EventVisibility),
@@ -90,7 +83,7 @@ const EventSchema = new Schema(
     status: {
       type: String,
       enum: Object.values(EventStatus),
-      default: EventStatus.DRAFT,
+      default: EventStatus.REGISTRATION_OPEN,
       index: true,
     },
 
@@ -131,8 +124,6 @@ const EventSchema = new Schema(
       required: true,
     },
 
-   
-
     mentors: {
       type: [Types.ObjectId],
       ref: "Member",
@@ -144,8 +135,6 @@ const EventSchema = new Schema(
       ref: "Member",
       default: [],
     },
-
-  
 
     /* -------------------------------------------------------------------------- */
     /*                             PARTNERS & SPONSORS                            */
@@ -172,8 +161,6 @@ const EventSchema = new Schema(
       default: [],
     },
 
-  
-
     /* -------------------------------------------------------------------------- */
     /*                               EVENT CONTENT                                */
     /* -------------------------------------------------------------------------- */
@@ -182,8 +169,6 @@ const EventSchema = new Schema(
       type: [TimelineSchema],
       default: [],
     },
-
-   
 
     rules: {
       type: [String],
@@ -194,45 +179,11 @@ const EventSchema = new Schema(
       type: [String],
       default: [],
     },
-
-    /* -------------------------------------------------------------------------- */
-    /*                                   SETTINGS                                 */
-    /* -------------------------------------------------------------------------- */
-
-    settings: {
-      publicVisible: {
-        type: Boolean,
-        default: true,
-      },
-
-      featuredEvent: {
-        type: Boolean,
-        default: false,
-      },
-
- 
-
-
-      allowCancellation: {
-        type: Boolean,
-        default: true,
-      },
-
-      showRemainingSeats: {
-        type: Boolean,
-        default: true,
-      },
-    },
-
- 
-   
   },
   {
     timestamps: true,
     versionKey: false,
   },
 );
-
-
 
 export const EventModel = model("Event", EventSchema);

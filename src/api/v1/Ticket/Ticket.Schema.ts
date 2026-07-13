@@ -32,8 +32,6 @@ export const TicketSchema = new Schema(
       uppercase: true,
     },
 
-
-  
     isActive: {
       type: Boolean,
       default: true,
