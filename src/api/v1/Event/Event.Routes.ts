@@ -9,20 +9,11 @@ router.post(
   eventController.create,
 );
 
-router.get(
-  "/find/pastEvents",
-  eventController.Find_PastEvents,
-);
+router.get("/find/pastEvents", eventController.Find_PastEvents);
 
-router.get(
-  "/find/upcomingEvents",
-  eventController.Find_UpcomingEvents,
-);
+router.get("/find/upcomingEvents", eventController.Find_UpcomingEvents);
 
-router.get(
-  "/find/ongoingEvents",
-  eventController.Find_OngoingEvents,
-);
+router.get("/find/ongoingEvents", eventController.Find_OngoingEvents);
 
 router.get(
   "/find/registrationOpenEvents",
