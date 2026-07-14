@@ -11,25 +11,21 @@ router.post(
 
 router.get(
   "/find/pastEvents",
-  AuthMiddleware.verifyAccessToken,
   eventController.Find_PastEvents,
 );
 
 router.get(
   "/find/upcomingEvents",
-  AuthMiddleware.verifyAccessToken,
   eventController.Find_UpcomingEvents,
 );
 
 router.get(
   "/find/ongoingEvents",
-  AuthMiddleware.verifyAccessToken,
   eventController.Find_OngoingEvents,
 );
 
 router.get(
   "/find/registrationOpenEvents",
-  AuthMiddleware.verifyAccessToken,
   eventController.Find_RegistrationOpenEvents,
 );
 
