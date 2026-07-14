@@ -2,6 +2,9 @@ import { EventModel } from "./Event.Schema";
 import { EventVisibility } from "./event.type";
 
 class EventUtils {
+  private readonly SELECT_FIELDS =
+    "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt";
+
   async FindEventById(eventId: string) {
     const event = await EventModel.findById(eventId);
 
@@ -13,97 +16,58 @@ class EventUtils {
   }
 
   async FIND_UPCOMING_EVENTS() {
-    const now = new Date();
-
-    return await EventModel.find({
+    return EventModel.find({
       visibility: EventVisibility.PUBLIC,
-      registrationStartAt: {
-        $gt: now,
-      },
+      registrationStartAt: { $gt: new Date() },
     })
       .sort({ registrationStartAt: 1 })
-      .select(
-        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
-      )
+      .select(this.SELECT_FIELDS)
       .lean();
   }
 
   async FIND_REGISTRATION_OPEN_EVENTS() {
     const now = new Date();
 
-    return await EventModel.find({
+    return EventModel.find({
       visibility: EventVisibility.PUBLIC,
-      registrationStartAt: {
-        $lte: now,
-      },
-      registrationEndAt: {
-        $gte: now,
-      },
+      registrationStartAt: { $lte: now },
+      registrationEndAt: { $gte: now },
     })
-      .sort({ registrationStartAt: 1 })
-      .select(
-        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
-      )
+      .sort({ registrationEndAt: 1 })
+      .select(this.SELECT_FIELDS)
       .lean();
   }
 
   async FIND_REGISTRATION_CLOSED_EVENTS() {
-    const now = new Date();
-
-    return await EventModel.find({
+    return EventModel.find({
       visibility: EventVisibility.PUBLIC,
-      registrationEndAt: {
-        $lt: now,
-      },
+      registrationEndAt: { $lt: new Date() },
     })
       .sort({ registrationEndAt: -1 })
-      .select(
-        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
-      )
+      .select(this.SELECT_FIELDS)
       .lean();
   }
 
   async FIND_ONGOING_EVENTS() {
     const now = new Date();
 
-    return await EventModel.find({
+    return EventModel.find({
       visibility: EventVisibility.PUBLIC,
-      timeline: {
-        $elemMatch: {
-          title: "Hackathon Begins",
-          startAt: {
-            $lte: now,
-          },
-          endAt: {
-            $gte: now,
-          },
-        },
-      },
+      registrationStartAt: { $lte: now },
+      registrationEndAt: { $gte: now },
     })
-      .select(
-        "coverImageUrl title shortDescription redirectUrl tags timeline",
-      )
+      .sort({ registrationEndAt: 1 })
+      .select(this.SELECT_FIELDS)
       .lean();
   }
 
   async FIND_PAST_EVENTS() {
-    const now = new Date();
-
-    return await EventModel.find({
+    return EventModel.find({
       visibility: EventVisibility.PUBLIC,
-      timeline: {
-        $elemMatch: {
-          title: "Hackathon Begins",
-          endAt: {
-            $lt: now,
-          },
-        },
-      },
+      registrationEndAt: { $lt: new Date() },
     })
-      .sort({ updatedAt: -1 })
-      .select(
-        "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt",
-      )
+      .sort({ registrationEndAt: -1 })
+      .select(this.SELECT_FIELDS)
       .lean();
   }
 }
