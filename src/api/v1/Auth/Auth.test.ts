@@ -1,96 +1,124 @@
-import { describe, it, expect, beforeAll, afterAll } from "@jest/globals";
+import { beforeAll, afterAll, describe, expect, it } from "@jest/globals";
+import mongoose from "mongoose";
+import { randomUUID } from "node:crypto";
 import supertest from "supertest";
+
 import app from "../../../app";
 import connectToMongoDB from "../../../infrastructure/db/mongo.db.config";
-import { authUtils } from "./Auth.Utils";
 import { AuthConstant } from "./Auth.Constant";
-import { communityUtils } from "../Community/Community.Utils";
-import mongoose from "mongoose";
+import { authUtils } from "./Auth.Utils";
 
-const data = {
-  CommunityName: "CodeVerse Community",
+const uniqueId = randomUUID().substring(0, 8);
+
+const testCommunity = {
+  CommunityName: `Test Community ${uniqueId}`,
 
   password: "StrongPassword@123",
 
-  Bio: "A global developer community empowering students and professionals through open source, AI, cloud computing, hackathons, and technical events.",
+  Bio: "This community is created automatically during Jest integration testing.",
 
   City: "Ranchi",
 
-  ContactPhone: "9876543210",
-
   Country: "India",
 
-  LogoUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500",
+  ContactPhone: `9${Math.floor(100000000 + Math.random() * 900000000)}`,
 
-  OfficialEmail: "hello@codeverse.dev",
+  OfficialEmail: `test-${uniqueId}@example.com`,
 
-  Website: "https://www.codeverse.dev",
+  Website: "https://example.com",
+
+  LogoUrl: "https://picsum.photos/300",
 
   socialLinks: {
-    github: "https://github.com/codeverse-community",
-    discord: "https://discord.gg/codeverse",
-    twitter: "https://twitter.com/codeverse_dev",
-    linkedin: "https://linkedin.com/company/codeverse-community",
-    instagram: "https://instagram.com/codeverse.dev",
-    youtube: "https://youtube.com/@codeversecommunity",
+    github: "https://github.com/test-community",
+    discord: "https://discord.gg/test-community",
+    twitter: "https://x.com/test-community",
+    linkedin: "https://linkedin.com/company/test-community",
+    instagram: "https://instagram.com/test-community",
+    youtube: "https://youtube.com/@test-community",
   },
 };
 
-export let OrganizationId: string;
-export let AuthId: string;
+let authId = "";
 
 beforeAll(async () => {
-  connectToMongoDB();
+  await connectToMongoDB();
 });
 
 afterAll(async () => {
-  mongoose.connection.close();
+  if (authId) {
+    try {
+      await authUtils.deleteUserById(authId);
+    } catch (err) {
+      console.error("Cleanup failed:", err);
+    }
+  }
+
+  await mongoose.connection.close();
 });
 
-describe("Test Auth Api", () => {
-  it("create new Organization", async () => {
+describe("Auth API Integration Tests", () => {
+  it("should create a new community account", async () => {
     const response = await supertest(app)
       .post("/api/v1/auth/community-signup")
-      .send(data);
-
-    console.log("Response Body:", response.body); // Log the response body for debugging
-
-    OrganizationId = response.body.data?._id;
-    AuthId = response.body.data?._id;
+      .send(testCommunity);
 
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty(
-      "message",
-      AuthConstant.COMMUNITY_ACCOUNT_CREATED,
-    );
-    expect(response.body).toHaveProperty("data");
+
+    expect(response.body.success).toBe(true);
+
+    expect(response.body.message).toBe(AuthConstant.COMMUNITY_ACCOUNT_CREATED);
+
+    expect(response.body.data).toBeDefined();
+
+    expect(response.body.data).toHaveProperty("_id");
+
+    expect(response.body.data.CommunityName).toBe(testCommunity.CommunityName);
+
+    expect(response.body.data.OfficialEmail).toBe(testCommunity.OfficialEmail);
+
+    authId = response.body.data.OwnerID;
   });
 
-  it("Login with the created Organization", async () => {
+  it("should not allow duplicate community signup", async () => {
+    const response = await supertest(app)
+      .post("/api/v1/auth/community-signup")
+      .send(testCommunity);
+
+    expect(response.status).not.toBe(200);
+
+    expect(response.body.success).toBe(false);
+  });
+
+  it("should login successfully", async () => {
     const response = await supertest(app).post("/api/v1/auth/login").send({
-      email: data.OfficialEmail,
-      password: data.password,
+      email: testCommunity.OfficialEmail,
+      password: testCommunity.password,
     });
 
-    console.log("Login Response Body:------>", response.body);
+    expect(response.status).toBe(200);
 
-    // expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("message", AuthConstant.LOGIN_SUCCESS);
-    expect(response.body).toHaveProperty("success", true);
-    expect(response.body).toHaveProperty("data");
+    expect(response.body.success).toBe(true);
+
+    expect(response.body.message).toBe(AuthConstant.LOGIN_SUCCESS);
+
+    expect(response.body.data).toBeDefined();
   });
-});
 
-// deleteUserById
+  it("should reject invalid password", async () => {
+    const response = await supertest(app).post("/api/v1/auth/login").send({
+      email: testCommunity.OfficialEmail,
+      password: "WrongPassword123",
+    });
 
-describe("Test Auth Utils deleteUserById function", () => {
-  it("should delete a user by ID", async () => {
-    try {
-      await authUtils.deleteUserById(AuthId);
-      console.log(`User with ID ${AuthId} deleted successfully.`);
-    } catch (error) {
-      console.error(`Error deleting user with ID ${AuthId}:`, error);
-      throw error; // Rethrow the error to fail the test
-    }
+    expect(response.status).not.toBe(200);
+
+    expect(response.body.success).toBe(false);
+  });
+
+  it("should delete the created user", async () => {
+    await expect(authUtils.deleteUserById(authId)).resolves.not.toThrow();
+
+    authId = "";
   });
 });

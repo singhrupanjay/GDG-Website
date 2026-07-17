@@ -12,7 +12,7 @@ route.get(
 
 //  Test these two Routes
 route.post(
-  "/permission/add/member/permissions/:userId",
+  "/permission/add/member/permissions",
   AuthMiddleware.verifyAccessToken,
   permissionController.addPermissions,
 );

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import { nanoid } from "nanoid";
+import { randomUUID } from "node:crypto";
 import { memberService } from "./Member.Service";
 import SendResponse from "../../../utils/SendResponse";
 import { authService } from "../Auth/Auth.Service";
@@ -85,7 +85,7 @@ class MemberController {
       });
 
       const createNewMember = await memberService.createNewMember({
-        Slug: slugify(`gdg-ranchi-${nanoid(8)}`, {
+        Slug: slugify(`gdg-ranchi-${randomUUID().slice(0, 5)}`, {
           lower: true,
           strict: true,
           trim: true,
