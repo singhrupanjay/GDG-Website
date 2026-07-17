@@ -6,6 +6,7 @@ import { permissionService } from "../Permission/Permission.service";
 import SendResponse from "../../../utils/SendResponse";
 import { eventService } from "./Event.Service";
 import { eventUtils } from "./Event.Utils";
+import { EventMode } from "./event.type";
 
 class EventController {
   public async create(req: Request, res: Response, next: NextFunction) {
@@ -38,10 +39,96 @@ class EventController {
         "Event created successfully",
       );
     } catch (error) {
-      SendResponse.ErrorResponse(res, error, "Failed to create event");
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+
+      return SendResponse.ErrorResponse(
+        res,
+        new Error(errorMessage),
+        "Failed to Create  Event",
+      );
     }
   }
 
+  public async updateEvent(req: Request, res: Response, next: NextFunction) {
+    try {
+      let userId = (req as Request & { userId?: string }).userId;
+
+      if (!userId) throw new Error("User Not Authenticated");
+
+      let checkPermissions = await permissionService.check_UserPermission(
+        String(userId),
+        Event_Permissions.UPDATE_EVENT,
+      );
+      if (!checkPermissions) {
+        throw new Error("Forbidden: You don't have permission to update event");
+      }
+
+      const { Slug } = req.params;
+      console.log("Slug", Slug);
+
+      if (!Slug || typeof Slug !== "string" || Slug.trim() === "") {
+        throw new Error("Event slug is required and cannot be empty");
+      }
+
+      let FindEvent = await eventUtils.FIND_EVENT_BY_SLUG(Slug);
+
+      if (!FindEvent) {
+        throw new Error("Failed to Find Event");
+      }
+
+      let UpdateEvent = await eventService.updateEvent(Slug, req.body);
+
+      SendResponse.SuccessResponse(
+        res,
+        UpdateEvent,
+        "Event Updated Successfully",
+      );
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+
+      console.error("Error in Find_Event_By_Slug:", error);
+
+      return SendResponse.ErrorResponse(res, error, errorMessage);
+    }
+  }
+
+  public async Find_Event_By_Slug(req: Request, res: Response) {
+    try {
+      const { Slug } = req.params;
+      console.log("Slug", Slug);
+
+      if (!Slug || typeof Slug !== "string" || Slug.trim() === "") {
+        throw new Error("Event slug is required and cannot be empty");
+      }
+
+      const findEvent = await eventUtils.FIND_EVENT_BY_SLUG(
+        String(Slug).trim(),
+      );
+
+      if (!findEvent) {
+        throw new Error("No event found with the provided slug");
+      }
+
+      return SendResponse.SuccessResponse(
+        res,
+        findEvent,
+        "Event retrieved successfully",
+      );
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+
+      console.error("Error in Find_Event_By_Slug:", error);
+
+      return SendResponse.ErrorResponse(
+        res,
+        new Error(errorMessage),
+        "Failed to retrieve event",
+      );
+    }
+  }
   public async Find_PastEvents(
     req: Request,
     res: Response,

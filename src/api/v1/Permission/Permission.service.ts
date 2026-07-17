@@ -2,6 +2,7 @@ import { ROLE_CONSTANT } from "../Auth/Auth.Constant";
 import { Default_Organization_Permissions } from "./Permission.constant";
 import { Permission, PermissionSchemaType } from "./Permission.model";
 import { permissionUtils } from "./Permission.utils";
+import { addPermission } from "./Permission.Validator";
 
 class PermissionService {
   public async get_DefaultPermissionsForRole(
@@ -27,6 +28,8 @@ class PermissionService {
     permissionData: PermissionSchemaType[],
     userId: string,
   ) {
+    addPermission.parse(permissionData);
+
     const normalized = permissionUtils.normalizePermissions(
       permissionData as any,
     );
@@ -36,7 +39,7 @@ class PermissionService {
     const res = await Permission.updateOne(
       { userId },
       { $addToSet: { permission: { $each: deduped } } },
-      { upsert: true },
+      { upsert: true }, // Create new if user don't have permission
     );
 
     return res;

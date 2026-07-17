@@ -10,10 +10,10 @@ router.post("/auth/forgot-password", AuthController.ForgotPassword);
 
 router.post("/auth/change-password", AuthController.changePassword);
 
-router.post(
-  "/auth/community-signup",
-  upload.single("Logo"),
-  AuthController.CommunitySignUp,
-);
+// router.post(
+//   "/auth/community-signup",
+//   upload.single("Logo"),
+//   AuthController.CommunitySignUp,
+// );
 
 export { router as AuthRoutes };

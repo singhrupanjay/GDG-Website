@@ -1,17 +1,25 @@
 import { Router } from "express";
 import { permissionController } from "./Permission.controller";
+import AuthMiddleware from "../Auth/Auth.middleware";
 
 const route = Router();
-
-route.get("/get/member/permissions", permissionController.getUserPermissions);
+// /api/v1/permission/get/member/permissions?userId=<memberId>
+route.get(
+  "/permission/get/member/permissions",
+  AuthMiddleware.verifyAccessToken,
+  permissionController.getUserPermissions,
+);
 
 //  Test these two Routes
 route.post(
-  "/add/member/permissions/:userId",
+  "/permission/add/member/permissions/:userId",
+  AuthMiddleware.verifyAccessToken,
   permissionController.addPermissions,
 );
+
 route.post(
   "/remove/member/permissions/:userId",
+  AuthMiddleware.verifyAccessToken,
   permissionController.removePermission,
 );
 

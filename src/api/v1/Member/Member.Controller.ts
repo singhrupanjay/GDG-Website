@@ -8,7 +8,7 @@ import { randomBytes } from "crypto";
 import { ROLE_CONSTANT } from "../Auth/Auth.Constant";
 import { memberUtils } from "./Member.Utils";
 import { permissionService } from "../Permission/Permission.service";
-import { memberPermission } from "../Permission/Permission.constant";
+import { Member_Permissions } from "../Permission/Permission.constant";
 
 import slugify from "slugify";
 import MemberChannel from "./Member.Channel";
@@ -19,7 +19,7 @@ class MemberController {
 
     let checkPermissions = await permissionService.check_UserPermission(
       String(userId),
-      memberPermission.CREATE_MEMBER,
+      Member_Permissions.CREATE_MEMBER,
     );
 
     if (!checkPermissions) {
@@ -154,7 +154,7 @@ class MemberController {
 
       let checkPermissions = await permissionService.check_UserPermission(
         String(userId),
-        memberPermission.VIEW_MEMBER,
+        Member_Permissions.VIEW_MEMBER,
       );
 
       if (!checkPermissions) {

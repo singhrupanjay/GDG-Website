@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { permissionService } from "../Permission/Permission.service";
-import jwt from "jsonwebtoken";
+
 import crypto from "crypto";
 import { Default_Organization_Permissions } from "../Permission/Permission.constant";
 import { communityService } from "../Community/Community.Service";
@@ -211,6 +211,8 @@ class AuthController {
 
   public ForgotPassword = async (req: Request, res: Response) => {
     let email: string = req.body.email;
+
+    console.log("email ---> ", email);
 
     try {
       let AuthUser = await memberUtils.FIND_Member_BY_EMAIL(email);

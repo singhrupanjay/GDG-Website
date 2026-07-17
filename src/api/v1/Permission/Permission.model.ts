@@ -18,7 +18,6 @@ const permission = new mongoose.Schema<PermissionSchemaType>(
     name: {
       type: String,
       required: true,
-      unique: true,
       index: true,
     },
     action: {

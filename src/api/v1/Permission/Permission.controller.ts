@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import SendResponse from "../../../utils/SendResponse";
 import { permissionService } from "./Permission.service";
+import { Permission_Permissions } from "./Permission.constant";
 
 class PermissionController {
   async getUserPermissions(req: Request, res: Response) {
@@ -29,26 +30,37 @@ class PermissionController {
   }
 
   async addPermissions(req: Request, res: Response) {
+    let userId = (req as Request & { userId?: string }).userId;
+
+    let checkPermissions = await permissionService.check_UserPermission(
+      String(userId),
+      Permission_Permissions.CREATE_PERMISSION,
+    );
+    if (!checkPermissions) {
+      throw new Error("Forbidden: You don't have permission to add Permission");
+    }
+
     try {
-      const { userId } = req.params;
-      const body = req.body;
-      if (!Array.isArray(body)) {
+      const { permission, memberId } = req.body;
+      if (!Array.isArray(permission)) {
         return SendResponse.ErrorResponse(
           res,
           null,
           "Expected array of permissions",
         );
       }
+
       const result = await permissionService.createPermission(
-        body,
-        String(userId),
+        permission,
+        String(memberId),
       );
       return SendResponse.SuccessResponse(
         res,
         result,
-        "Permissions added/updated",
+        "Granted Permission to Member ",
       );
     } catch (error: any) {
+      console.log(error);
       return SendResponse.ErrorResponse(
         res,
         error,

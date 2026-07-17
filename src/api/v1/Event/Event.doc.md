@@ -358,31 +358,262 @@ year
 
 ---
 
-# 6. Update Event
+# 📘 Update Event API Documentation
 
+## Endpoint
+
+```http
+PATCH /api/v1/events/:Slug
 ```
-PATCH /api/v1/events/:eventId
+
+### Description
+
+Updates an existing event. Only the fields provided in the request body will be updated. All other fields remain unchanged.
+
+---
+
+## Authentication
+
+**Required**
+
+```http
+Authorization: Bearer <JWT_TOKEN>
 ```
 
-Partial update supported.
+---
 
-Example Request
+## Path Parameters
+
+| Parameter | Type     | Required | Description                         |
+| --------- | -------- | -------- | ----------------------------------- |
+| `Slug`    | `string` | ✅ Yes   | Unique slug of the event to update. |
+
+### Example
+
+```http
+PATCH /api/v1/event/update/open-source-hackathon-2026
+```
+
+---
+
+## Request Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+```
+
+---
+
+## Request Body (Example)
+
+> You only need to send the fields you want to update.
 
 ```json
 {
-  "title": "Updated Cloud Study Jam",
-  "shortDescription": "Updated description"
+  "title": "AI Innovation Summit 2026",
+  "shortDescription": "A one-day summit focused on Artificial Intelligence, Machine Learning, and Generative AI.",
+  "descriptionMarkdown": "# 🤖 AI Innovation Summit 2026\n\nJoin AI researchers, industry experts, and developers for a full-day event covering the latest advancements in Artificial Intelligence, LLMs, Robotics, and AI-powered applications.",
+  "redirectUrl": "https://example.com/events/ai-innovation-summit-2026",
+  "category": "Conference",
+  "visibility": "PUBLIC",
+  "status": "REGISTRATION_CLOSED",
+  "coverImageUrl": "https://images.example.com/events/ai-summit-banner.jpg",
+  "introVideoUrl": "https://www.youtube.com/embed/aqz-KE-bpKQ",
+  "registrationStartAt": "2026-08-01T09:00:00.000Z",
+  "registrationEndAt": "2026-09-05T23:59:59.000Z",
+  "tags": [
+    "AI",
+    "Machine Learning",
+    "Generative AI",
+    "LLM",
+    "Cloud",
+    "Technology"
+  ],
+
+  "rules": [
+    "Carry a valid ID proof.",
+    "Complete registration before the deadline.",
+    "Follow the event code of conduct."
+  ]
 }
 ```
 
-Response
+---
+
+## Successful Response (200 OK)
 
 ```json
 {
   "success": true,
-  "message": "Event updated successfully."
+  "message": "Event Updated Successfully",
+  "data": {
+    "_id": "6a55bdafc4a80708f25f3966",
+    "Slug": "break-the-pattern-9c80f7d9",
+    "communityId": "6a5515e619178aff73262707",
+    "createdBy": "6a54a4d9f9ac87469c5786fd",
+    "title": "AI Innovation Summit 2026",
+    "shortDescription": "A one-day summit focused on Artificial Intelligence, Machine Learning, and Generative AI.",
+    "descriptionMarkdown": "# 🤖 AI Innovation Summit 2026\n\nJoin AI researchers, industry experts, and developers for a full-day event covering the latest advancements in Artificial Intelligence, LLMs, Robotics, and AI-powered applications.",
+    "redirectUrl": "https://example.com/events/ai-innovation-summit-2026",
+    "tags": [
+      "AI",
+      "Machine Learning",
+      "Generative AI",
+      "LLM",
+      "Cloud",
+      "Technology"
+    ],
+    "category": "Conference",
+    "visibility": "PUBLIC",
+    "status": "REGISTRATION_CLOSED",
+    "coverImageUrl": "https://images.example.com/events/ai-summit-banner.jpg",
+    "introVideoUrl": "https://www.youtube.com/embed/aqz-KE-bpKQ",
+    "registrationStartAt": "2026-08-01T09:00:00.000Z",
+    "registrationEndAt": "2026-09-05T23:59:59.000Z",
+    "venue": {
+      "mode": "OFFLINE",
+      "venueName": "BIT Mesra",
+      "address": "BIT Mesra Campus",
+      "city": "Ranchi",
+      "state": "Jharkhand",
+      "country": "India"
+    },
+    "mentors": [],
+    "judges": [],
+    "partners": [],
+    "sponsors": [],
+    "tickets": [
+      {
+        "name": "General Admission",
+        "type": "FREE",
+        "description": "Free workshop access for all registered participants.",
+        "price": 0,
+        "currency": "INR",
+        "isActive": false,
+        "_id": "6a55bdafc4a80708f25f3967",
+        "createdAt": "2026-07-14T04:40:15.468Z",
+        "updatedAt": "2026-07-14T04:40:15.468Z"
+      }
+    ],
+    "timeline": [
+      {
+        "title": "Registration Opens",
+        "description": "",
+        "startAt": "2026-02-20T09:00:00.000Z",
+        "endAt": "2026-03-12T23:59:59.000Z",
+        "_id": "6a55bdafc4a80708f25f3968"
+      },
+      {
+        "title": "Participant Check-in",
+        "description": "",
+        "startAt": "2026-03-14T08:30:00.000Z",
+        "endAt": "2026-03-14T09:30:00.000Z",
+        "_id": "6a55bdafc4a80708f25f3969"
+      },
+      {
+        "title": "Opening Session",
+        "description": "",
+        "startAt": "2026-03-14T10:00:00.000Z",
+        "endAt": "2026-03-14T10:30:00.000Z",
+        "_id": "6a55bdafc4a80708f25f396a"
+      },
+      {
+        "title": "DSA Workshop",
+        "description": "",
+        "startAt": "2026-03-14T10:30:00.000Z",
+        "endAt": "2026-03-14T13:00:00.000Z",
+        "_id": "6a55bdafc4a80708f25f396b"
+      },
+      {
+        "title": "Live Coding & Interview Session",
+        "description": "",
+        "startAt": "2026-03-14T14:00:00.000Z",
+        "endAt": "2026-03-14T16:30:00.000Z",
+        "_id": "6a55bdafc4a80708f25f396c"
+      },
+      {
+        "title": "Q&A and Closing Ceremony",
+        "description": "",
+        "startAt": "2026-03-14T16:30:00.000Z",
+        "endAt": "2026-03-14T17:30:00.000Z",
+        "_id": "6a55bdafc4a80708f25f396d"
+      }
+    ],
+    "rules": [
+      "Carry a valid ID proof.",
+      "Complete registration before the deadline.",
+      "Follow the event code of conduct."
+    ],
+    "requirements": [
+      "Laptop",
+      "Government or College ID",
+      "Basic programming knowledge",
+      "Code editor installed",
+      "Interest in Data Structures & Algorithms"
+    ],
+    "createdAt": "2026-07-14T04:40:15.468Z",
+    "updatedAt": "2026-07-16T14:27:33.734Z"
+  }
 }
 ```
+
+---
+
+## Error Responses
+
+### 400 Bad Request
+
+```json
+{
+  "success": false,
+  "message": "Event slug is required and cannot be empty"
+}
+```
+
+---
+
+### 403 Forbidden
+
+```json
+{
+  "success": false,
+  "message": "Forbidden: You don't have permission to update event"
+}
+```
+
+---
+
+### 404 Not Found
+
+```json
+{
+  "success": false,
+  "message": "Failed to Find Event"
+}
+```
+
+---
+
+### 500 Internal Server Error
+
+```json
+{
+  "success": false,
+  "message": "Failed to update event"
+}
+```
+
+---
+
+## Notes
+
+- Authentication is required.
+- User must have the `UPDATE_EVENT` permission.
+- The event is identified by its `Slug`.
+- Only the fields included in the request body are updated.
+- Fields not sent in the request remain unchanged.
+- Validation is performed before updating the event.
 
 ---
 

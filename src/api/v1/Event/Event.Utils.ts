@@ -3,7 +3,7 @@ import { EventVisibility } from "./event.type";
 
 class EventUtils {
   private readonly SELECT_FIELDS =
-    "coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt";
+    "Slug coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt";
 
   async FindEventById(eventId: string) {
     const event = await EventModel.findById(eventId);
@@ -69,6 +69,12 @@ class EventUtils {
       .sort({ registrationEndAt: -1 })
       .select(this.SELECT_FIELDS)
       .lean();
+  }
+
+  async FIND_EVENT_BY_SLUG(Slug: string) {
+    return EventModel.find({
+      Slug: Slug,
+    });
   }
 }
 
