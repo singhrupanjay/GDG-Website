@@ -41,9 +41,13 @@ const testCommunity = {
 
 let authId = "";
 
+
+
 beforeAll(async () => {
   await connectToMongoDB();
 });
+
+
 
 afterAll(async () => {
   if (authId) {
