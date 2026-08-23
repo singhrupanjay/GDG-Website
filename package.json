@@ -23,6 +23,7 @@
     "amqplib": "^2.0.1",
     "argon2": "^0.44.0",
     "cloudinary": "^2.10.0",
+    "convex": "^1.44.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

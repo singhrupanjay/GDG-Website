@@ -151,6 +151,7 @@ class MemberController {
   findAllMembers = async (req: Request, res: Response) => {
     try {
       let userId = (req as Request & { userId?: string }).userId;
+      let { limit, page } = req.query;
 
       let checkPermissions = await permissionService.check_UserPermission(
         String(userId),
@@ -163,10 +164,46 @@ class MemberController {
         );
       }
 
-      let FindAllMembers = await memberUtils.FIND_ALL_Members();
+      const skip = (Number(page) - 1) * Number(limit);
+
+      const FindAllMembers = await memberUtils.FIND_ALL_Members(
+        Number(limit),
+        skip,
+      );
+
       SendResponse.SuccessResponse(
         res,
         FindAllMembers,
+        "All Members fetched successfully",
+      );
+    } catch (error) {
+      SendResponse.ErrorResponse(
+        res,
+        error,
+        error instanceof Error ? error.message : "Internal Server Error",
+      );
+    }
+  };
+
+  findMemberBySlug = async (req: Request, res: Response) => {
+    try {
+      let userId = (req as Request & { userId?: string }).userId;
+      let { Slug } = req.params;
+
+      let checkPermissions = await permissionService.check_UserPermission(
+        String(userId),
+        Member_Permissions.VIEW_MEMBER,
+      );
+
+      if (!checkPermissions) {
+        throw new Error("Forbidden: You don't have permission to view Member");
+      }
+      console.log("Slug", Slug);
+      let findMember = await memberUtils.FIND_Member_By_Slug(String(Slug));
+
+      SendResponse.SuccessResponse(
+        res,
+        findMember,
         "All Members fetched successfully",
       );
     } catch (error) {

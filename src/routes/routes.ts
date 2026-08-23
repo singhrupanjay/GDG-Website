@@ -5,6 +5,7 @@ import { MemberRoutes } from "../api/v1/Member/Member.routes";
 import { communityRouter } from "../api/v1/Community/Community.Router";
 import { PermissionRoutes } from "../api/v1/Permission/Permission.routes";
 import { EventRouter } from "../api/v1/Event/Event.Routes";
+import { PartnerRoutes } from "../api/v1/Partners_And_Sponsors/Partner.Routes";
 
 const route = Router();
 
@@ -15,6 +16,7 @@ route.use(
   MemberRoutes,
   communityRouter,
   EventRouter,
+  PartnerRoutes,
   PermissionRoutes,
 );
 

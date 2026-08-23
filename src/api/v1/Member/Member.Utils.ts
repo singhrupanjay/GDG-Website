@@ -9,10 +9,17 @@ class MemberUtils {
     return !!FindMember;
   };
 
-  FIND_ALL_Members = async () => {
-    return await MemberModel.find().select(
-      "firstName lastName email membershipStatus primaryRole imageUrl",
-    );
+  FIND_ALL_Members = async (limit: number, skip: number) => {
+    return await MemberModel.find()
+      .select(
+        "firstName lastName email membershipStatus primaryRole imageUrl createdAt Slug",
+      )
+      .limit(limit)
+      .skip(skip);
+  };
+
+  FIND_Member_By_Slug = async (Slug: string) => {
+    return await MemberModel.findOne({ Slug: Slug });
   };
 
   FIND_Member_BY_EMAIL = async (Email: string) => {

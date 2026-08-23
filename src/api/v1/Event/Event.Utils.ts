@@ -72,9 +72,16 @@ class EventUtils {
   }
 
   async FIND_EVENT_BY_SLUG(Slug: string) {
-    return EventModel.find({
-      Slug: Slug,
-    });
+    return EventModel.find({ Slug })
+      .populate({
+        path: "mentors",
+        select: "firstName lastName Bio imageUrl socialLinks",
+      })
+      .populate({
+        path: "judges",
+        select: "firstName lastName Bio imageUrl socialLinks",
+      })
+      .lean();
   }
 }
 
