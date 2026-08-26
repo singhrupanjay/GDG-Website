@@ -81,6 +81,11 @@ class GalleryController {
         tags: data.tags,
         albumImageUrl: data.albumImageUrl,
         event: findEventBYName._id,
+        images: [],
+        visibility: data.visibility,
+        status: data.status,
+        imageCount: 0,
+        
       });
 
       SendResponse.SuccessResponse(

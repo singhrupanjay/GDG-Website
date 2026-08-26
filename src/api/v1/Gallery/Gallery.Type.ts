@@ -2,7 +2,6 @@ import { Types } from "mongoose";
 import z from "zod";
 import {
   AddImageToGallerySchema,
-  CreateGallerySchema,
   RemoveImageFromGallerySchema,
   UpdateGallerySchema,
 } from "./Gallery.Validator";
@@ -32,12 +31,12 @@ export interface IGallery {
 
   status: "draft" | "published";
 
-  uploadedBy: Types.ObjectId;
+  uploadedBy?: Types.ObjectId;
 
-  isDeleted: boolean;
+  isDeleted?: boolean;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type UateGpdalleryProps = z.infer<typeof UpdateGallerySchema>;

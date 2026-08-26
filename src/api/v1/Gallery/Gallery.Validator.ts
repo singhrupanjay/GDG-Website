@@ -33,7 +33,7 @@ const GalleryBaseSchema = z.object({
 
   event: objectIdSchema.optional().nullable(),
 
-  tags: z.array(z.string().trim().toLowerCase()).optional(),
+  tags: z.array(z.string().trim().toLowerCase()),
 
   visibility: z.enum(["public", "private"]).default("public"),
 
