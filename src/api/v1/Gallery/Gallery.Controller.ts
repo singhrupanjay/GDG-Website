@@ -8,6 +8,7 @@ import { permissionService } from "../Permission/Permission.service";
 import { Gallery_Permissions } from "../Permission/Permission.constant";
 import GalleryService from "./Gallery.Service";
 import { IGallery } from "./Gallery.Type";
+import { eventUtils } from "../Event/Event.Utils";
 
 class GalleryController {
   FIND_SINGLE_GALLERY = (req: Request, res: Response) => {
@@ -66,8 +67,21 @@ class GalleryController {
         // Or handle gracefully: return;
       }
 
+      let findEventBYName = await eventUtils.FIND_EVENT_BY_NAME(
+        req.body.EventName,
+      );
+
+      if (!findEventBYName) {
+        throw new Error("Gallery data is missing");
+      }
+
       // TypeScript now knows 'data' is not undefined here
-      let createGallery = await GalleryService.createNewGallery(data);
+      let createGallery = await GalleryService.createNewGallery({
+        title: data.title,
+        tags: data.tags,
+        albumImageUrl: data.albumImageUrl,
+        event: findEventBYName._id,
+      });
 
       SendResponse.SuccessResponse(
         res,

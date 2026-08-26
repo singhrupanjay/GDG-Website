@@ -15,6 +15,26 @@ class EventUtils {
     return event;
   }
 
+async FIND_ALL_EVENT(
+  page: number,
+  limit: number,
+) {
+ 
+
+  const pageNumber = page - 1; 
+
+  console.log('limit', limit)
+
+
+  const events = await EventModel.find()
+    .select("Slug registrationStartAt title category venue.venueName venue.address visibility coverImageUrl status")
+    .limit(limit)
+    .skip(pageNumber * limit)
+    .lean();
+
+  return events;
+}
+
   async FIND_UPCOMING_EVENTS() {
     return EventModel.find({
       visibility: EventVisibility.PUBLIC,
@@ -69,6 +89,10 @@ class EventUtils {
       .sort({ registrationEndAt: -1 })
       .select(this.SELECT_FIELDS)
       .lean();
+  }
+
+  async FIND_EVENT_BY_NAME(name: string) {
+    return EventModel.findOne({ title: name });
   }
 
   async FIND_EVENT_BY_SLUG(Slug: string) {

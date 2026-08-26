@@ -16,6 +16,7 @@ export enum EventVisibility {
   PUBLIC = "PUBLIC",
   PRIVATE = "PRIVATE",
   UNLISTED = "UNLISTED",
+  DRAFT = "DRAFT",
 }
 
 export enum EventStatus {

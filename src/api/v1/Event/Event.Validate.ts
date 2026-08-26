@@ -9,7 +9,7 @@ export const EventValidate = z.object({
   shortDescription: z.string().min(10).max(200),
   descriptionMarkdown: z.string().min(20),
   redirectUrl: z.string().url(),
-  tags: z.array(z.string()).min(1).max(10),
+  tags: z.array(z.string()).min(1).max(10).optional(),
   category: z.enum(EVENT_TYPE),
   visibility: z.enum(Object.values(EventVisibility)),
   status: z.enum(Object.values(EventStatus)),
@@ -22,7 +22,7 @@ export const EventValidate = z.object({
     message: "Invalid date format",
   }),
   venue: z.object({
-    mode: z.enum(Object.values(EventMode)),
+    mode: z.enum(EventMode),
     venueName: z.string().min(3).max(100).optional(),
     address: z.string().min(5).max(200).optional(),
     city: z.string().min(2).max(50).optional(),
@@ -65,7 +65,7 @@ export const updateEventValidator = z
   .object({
     communityId: z.string().length(24).optional(),
     title: z.string().min(5).max(100).optional(),
-    shortDescription: z.string().min(10).max(200).optional(),
+    shortDescription: z.string().min(10).max(450).optional(),
     descriptionMarkdown: z.string().min(20).optional(),
     redirectUrl: z.string().url().optional(),
     tags: z.array(z.string()).min(1).max(10).optional(),
