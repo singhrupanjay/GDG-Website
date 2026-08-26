@@ -16,4 +16,10 @@ route.get(
   memberController.findAllMembers,
 );
 
+route.get(
+  "/find/memberBySlug/:Slug",
+  AuthMiddleware.verifyAccessToken,
+  memberController.findMemberBySlug,
+);
+
 export { route as MemberRoutes };
