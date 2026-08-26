@@ -85,7 +85,6 @@ class GalleryController {
         visibility: data.visibility,
         status: data.status,
         imageCount: 0,
-        
       });
 
       SendResponse.SuccessResponse(
