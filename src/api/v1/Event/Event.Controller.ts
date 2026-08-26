@@ -95,10 +95,9 @@ class EventController {
       return SendResponse.ErrorResponse(res, error, errorMessage);
     }
   }
-   
-  public async Find_All_Event(req: Request, res: Response) {
-  try {
 
+  public async Find_All_Event(req: Request, res: Response) {
+    try {
       let userId = (req as Request & { userId?: string }).userId;
 
       if (!userId) throw new Error("User Not Authenticated");
@@ -108,43 +107,39 @@ class EventController {
         Event_Permissions.VIEW_EVENT,
       );
 
-       if (!checkPermissions) {
-        throw new Error("Forbidden: You don't have permission to find all event");
+      if (!checkPermissions) {
+        throw new Error(
+          "Forbidden: You don't have permission to find all event",
+        );
       }
 
+      const { Limit, Page } = req.query;
 
-    const { Limit, Page } = req.query;
+      if (!Limit || !Page) {
+        throw new Error("Limit and Page are required");
+      }
 
+      const limit = Number(Limit);
+      const page = Number(Page);
 
-    if (!Limit || !Page) {
-      
-      throw new Error("Limit and Page are required")
+      if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
+        throw new Error("Limit and Page must be positive numbers");
+      }
+
+      const findAllEvent = await eventUtils.FIND_ALL_EVENT(page, limit);
+
+      SendResponse.SuccessResponse(
+        res,
+        findAllEvent,
+        "Event fetch successfully",
+      );
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+
+      return SendResponse.ErrorResponse(res, error, errorMessage);
     }
-
-    const limit = Number(Limit);
-    const page = Number(Page);
-
-  
-    if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
-  
-
-      throw new Error("Limit and Page must be positive numbers")
-    }
-
-    const findAllEvent = await eventUtils.FIND_ALL_EVENT(page, limit);
-
-    SendResponse.SuccessResponse(
-      res,
-      findAllEvent,
-      "Event fetch successfully"
-    );
-  } catch (error: any) {
-    const errorMessage =
-      error instanceof Error ? error.message : "An unexpected error occurred";
-
-    return SendResponse.ErrorResponse(res, error, errorMessage);
   }
-}
 
   public async Find_Event_By_Slug(req: Request, res: Response) {
     try {

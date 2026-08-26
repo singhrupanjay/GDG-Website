@@ -15,25 +15,21 @@ class EventUtils {
     return event;
   }
 
-async FIND_ALL_EVENT(
-  page: number,
-  limit: number,
-) {
- 
+  async FIND_ALL_EVENT(page: number, limit: number) {
+    const pageNumber = page - 1;
 
-  const pageNumber = page - 1; 
+    console.log("limit", limit);
 
-  console.log('limit', limit)
+    const events = await EventModel.find()
+      .select(
+        "Slug registrationStartAt title category venue.venueName venue.address visibility coverImageUrl status",
+      )
+      .limit(limit)
+      .skip(pageNumber * limit)
+      .lean();
 
-
-  const events = await EventModel.find()
-    .select("Slug registrationStartAt title category venue.venueName venue.address visibility coverImageUrl status")
-    .limit(limit)
-    .skip(pageNumber * limit)
-    .lean();
-
-  return events;
-}
+    return events;
+  }
 
   async FIND_UPCOMING_EVENTS() {
     return EventModel.find({

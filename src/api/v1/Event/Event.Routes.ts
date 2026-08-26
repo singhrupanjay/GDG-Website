@@ -9,7 +9,11 @@ router.post(
   eventController.create,
 );
 
-router.get('/find/AllEvent',  AuthMiddleware.verifyAccessToken, eventController.Find_All_Event)
+router.get(
+  "/find/AllEvent",
+  AuthMiddleware.verifyAccessToken,
+  eventController.Find_All_Event,
+);
 
 router.get("/event/:Slug", eventController.Find_Event_By_Slug);
 router.get("/find/pastEvents", eventController.Find_PastEvents);
