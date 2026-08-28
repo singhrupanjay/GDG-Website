@@ -12,7 +12,7 @@ class GalleryService {
         description: GalleryProps.description,
         images: GalleryProps.images,
         tags: GalleryProps.tags,
-        uploadedBy: String(GalleryProps.uploadedBy),
+        uploadedBy: GalleryProps.uploadedBy,
         albumImageUrl: GalleryProps.albumImageUrl,
         status: GalleryProps.status,
         visibility: GalleryProps.visibility,

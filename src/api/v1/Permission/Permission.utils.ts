@@ -1,4 +1,4 @@
-import { PermissionSchemaType } from "./Permission.model";
+import { Permission, PermissionSchemaType } from "./Permission.model";
 
 class PermissionUtils {
   public normalizePermissions(input: Partial<PermissionSchemaType>[]) {
@@ -58,6 +58,10 @@ class PermissionUtils {
       throw err;
     }
   }
+
+  public DeletePermissionByAuthID = async (_id: string) => {
+    return await Permission.findOneAndDelete({ userId: _id });
+  };
 }
 
 export let permissionUtils = new PermissionUtils();

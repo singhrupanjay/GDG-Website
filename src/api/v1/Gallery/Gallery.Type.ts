@@ -15,7 +15,7 @@ export interface IGallery {
 
   albumImageUrl: string;
 
-  event: Types.ObjectId;
+  event: string;
 
   images: {
     url: string;
@@ -31,7 +31,7 @@ export interface IGallery {
 
   status: "draft" | "published";
 
-  uploadedBy?: Types.ObjectId;
+  uploadedBy?: string;
 
   isDeleted?: boolean;
 

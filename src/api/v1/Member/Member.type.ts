@@ -10,6 +10,7 @@ type memberStatusType =
   "On Boarding" | "inactive" | "Active" | "Suspended" | "Banned";
 
 export type MemberType = {
+  _id?: string;
   firstName: string;
   lastName: string;
   imageUrl?: string;

@@ -146,6 +146,8 @@ class AuthController {
         throw new Error(AuthConstant.USER_NOT_FOUND);
       }
 
+      let findMember = await memberUtils.FIND_Member_BY_EMAIL(FindUser.email);
+
       console.log("User found:", FindUser);
 
       let comparePass = await authUtils.comparePassword(
@@ -200,6 +202,7 @@ class AuthController {
         res,
         {
           FindUser,
+          memberId: findMember?._id,
           perms,
         },
         AuthConstant.LOGIN_SUCCESS,

@@ -7,6 +7,8 @@ import app from "../../../app";
 import connectToMongoDB from "../../../infrastructure/db/mongo.db.config";
 import { AuthConstant } from "./Auth.Constant";
 import { authUtils } from "./Auth.Utils";
+import { permissionUtils } from "../Permission/Permission.utils";
+import { communityUtils } from "../Community/Community.Utils";
 
 const uniqueId = randomUUID().substring(0, 8);
 
@@ -40,6 +42,7 @@ const testCommunity = {
 };
 
 let authId = "";
+let CommunityId = "";
 
 beforeAll(async () => {
   await connectToMongoDB();
@@ -78,6 +81,7 @@ describe("Auth API Integration Tests", () => {
     expect(response.body.data.OfficialEmail).toBe(testCommunity.OfficialEmail);
 
     authId = response.body.data.OwnerID;
+    CommunityId = response.body.data._id;
   });
 
   it("should not allow duplicate community signup", async () => {
@@ -116,9 +120,21 @@ describe("Auth API Integration Tests", () => {
     expect(response.body.success).toBe(false);
   });
 
+  it("Delete Created Permission During Comunity SignUP", async () => {
+    const response = await permissionUtils.DeletePermissionByAuthID(authId);
+    expect(response).toBeDefined();
+  });
+
   it("should delete the created user", async () => {
     await expect(authUtils.deleteUserById(authId)).resolves.not.toThrow();
 
     authId = "";
+  });
+
+  it("should Delete Test Community By Id", async () => {
+    const respose = await communityUtils.DeleteCommunityById(CommunityId);
+
+    expect(respose).toBeDefined();
+    expect(respose?.$isDeleted).toBeTruthy();
   });
 });

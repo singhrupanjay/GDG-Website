@@ -26,6 +26,7 @@ class AuthMiddleware {
       }
 
       const userId = (decodedData as { data: { _id: string } }).data._id;
+
       (req as Request & { userId?: string }).userId = userId;
 
       next();

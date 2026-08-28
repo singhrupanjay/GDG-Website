@@ -4,7 +4,7 @@ import argon2 from "argon2";
 import path from "path";
 import fs from "fs";
 import { env_Constant } from "../../../constant/env.constant";
-import { OtpTemplateType } from "./Auth.type";
+import { AuthType, OtpTemplateType } from "./Auth.type";
 
 class AuthUtils {
   public async FIND_USER_BY_EMAIL(email: string) {
@@ -46,6 +46,31 @@ class AuthUtils {
     if (user) {
       user.isBanned = false;
       await user.updateOne({ isBanned: user.isBanned });
+    }
+  }
+
+  public async UpdateMemberID(_id: string, MemberId: string) {
+    try {
+      if (!_id || !MemberId) {
+        throw new Error("Invalid _id or MemberId");
+      }
+
+      const updatedUser = await AuthModel.findOneAndUpdate(
+        { _id },
+        { userId: MemberId },
+        {
+          new: true, // Return the updated document
+          runValidators: true, // Run schema validators
+        },
+      );
+
+      if (!updatedUser) {
+        throw new Error(`User with ID ${_id} not found`);
+      }
+
+      return updatedUser;
+    } catch (error: any) {
+      throw new Error("Failed To update UserId", error);
     }
   }
 

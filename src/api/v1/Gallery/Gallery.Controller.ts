@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-import SendResponse from "../../../utils/SendResponse";
+import slugify from "slugify";
 import GalleryUtils from "./Gallery.Utils";
-import { CreateGallerySchema } from "./Gallery.Validator";
 import normalizeError from "../../../utils/normalizeError";
+import SendResponse from "../../../utils/SendResponse";
 
 import { permissionService } from "../Permission/Permission.service";
 import { Gallery_Permissions } from "../Permission/Permission.constant";
 import GalleryService from "./Gallery.Service";
 import { IGallery } from "./Gallery.Type";
 import { eventUtils } from "../Event/Event.Utils";
+import { CreateGallerySchema } from "./Gallery.Validator";
+import { memberUtils } from "../Member/Member.Utils";
 
 class GalleryController {
   FIND_SINGLE_GALLERY = (req: Request, res: Response) => {
@@ -39,7 +41,6 @@ class GalleryController {
         throw new Error("User ID not found in request");
       }
 
-      // 1. Check Permissions
       let checkPermissions = await permissionService.check_UserPermission(
         String(userId),
         Gallery_Permissions.CREATE_GALLERY,
@@ -51,11 +52,24 @@ class GalleryController {
         );
       }
 
-      // 2. Validate Input
+      let findMember = await memberUtils.FIND_Member_ID_By_UserId(
+        String(userId),
+      );
+      if (!findMember) {
+        throw new Error(
+          "Forbidden: You can't Create the Gallery Becouse this Feature is only for Member",
+        );
+      }
+
       let { success, data, error } = await CreateGallerySchema.safeParseAsync({
         ...req.body,
-        uploadedBy: userId, // Force uploadedBy from auth token, ignore body
-        imageCount: req.body.images?.length || 0, // Calculate count from images
+
+        slug: slugify(req.body.title + crypto.randomUUID(), {
+          lower: true,
+          trim: true,
+        }),
+
+        uploadedBy: findMember._id,
       });
 
       if (!success) {
@@ -64,7 +78,6 @@ class GalleryController {
 
       if (!data) {
         throw new Error("Gallery data is missing");
-        // Or handle gracefully: return;
       }
 
       let findEventBYName = await eventUtils.FIND_EVENT_BY_NAME(
@@ -75,16 +88,17 @@ class GalleryController {
         throw new Error("Gallery data is missing");
       }
 
-      // TypeScript now knows 'data' is not undefined here
       let createGallery = await GalleryService.createNewGallery({
         title: data.title,
-        tags: data.tags,
+        description: data.description,
+        event: data.event_Id,
         albumImageUrl: data.albumImageUrl,
-        event: findEventBYName._id,
+        tags: data.tags,
         images: [],
-        visibility: data.visibility,
-        status: data.status,
         imageCount: 0,
+        status: data.status,
+        visibility: data.visibility,
+        uploadedBy: data.uploadedBy,
       });
 
       SendResponse.SuccessResponse(
