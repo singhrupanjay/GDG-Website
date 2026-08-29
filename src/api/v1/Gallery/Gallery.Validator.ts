@@ -19,6 +19,8 @@ export const CreateGallerySchema = z.object({
     .max(100, "Title must be under 100 characters")
     .trim(),
 
+  EventName: z.string(),
+
   slug: z.string().min(1, "Slug is required").max(100).trim(),
 
   albumImageUrl: z.string().url("Album image URL must be a valid URL"),
@@ -27,8 +29,7 @@ export const CreateGallerySchema = z.object({
     .max(500, "Description must be under 500 characters")
     .trim(),
 
-  event_Id: objectIdSchema,
-
+  
   tags: z.array(z.string().trim()),
 
   visibility: z.enum(["public", "private"]).default("public"),

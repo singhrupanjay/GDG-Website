@@ -38,7 +38,6 @@ const GallerySchema = new Schema<IGallery>(
       {
         url: {
           type: String,
-          unique: true,
           required: true,
         },
         publicId: {

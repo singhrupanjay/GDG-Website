@@ -9,3 +9,5 @@ routes.post(
   AuthMiddleware.verifyAccessToken,
   GalleryController.Create_New_Gallery,
 );
+
+export { routes as GalleryRoutes };

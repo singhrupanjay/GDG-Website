@@ -10,6 +10,7 @@ class AuthUtils {
   public async FIND_USER_BY_EMAIL(email: string) {
     return AuthModel.findOne({ email: email });
   }
+
   public async getUserById(userId: string) {
     return await AuthModel.findById(userId);
   }

@@ -6,13 +6,17 @@ class EventUtils {
     "Slug coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt";
 
   async FindEventById(eventId: string) {
-    const event = await EventModel.findById(eventId);
+    const event = await EventModel.findById(eventId).lean();
 
     if (!event) {
       throw new Error("Event not found");
     }
 
     return event;
+  }
+
+  async FindAllEventName() {
+    EventModel.find().select("title").lean();
   }
 
   async FIND_ALL_EVENT(page: number, limit: number) {

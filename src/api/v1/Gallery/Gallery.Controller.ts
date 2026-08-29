@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import crypto from "crypto";
 import slugify from "slugify";
 import GalleryUtils from "./Gallery.Utils";
 import normalizeError from "../../../utils/normalizeError";
@@ -46,6 +47,8 @@ class GalleryController {
         Gallery_Permissions.CREATE_GALLERY,
       );
 
+      console.log("User Id ---> ", userId, checkPermissions);
+
       if (!checkPermissions) {
         throw new Error(
           "Forbidden: You don't have permission to create gallery",
@@ -64,12 +67,14 @@ class GalleryController {
       let { success, data, error } = await CreateGallerySchema.safeParseAsync({
         ...req.body,
 
-        slug: slugify(req.body.title + crypto.randomUUID(), {
+        slug: slugify(req.body.title + crypto.randomBytes(4).toString("hex"), {
           lower: true,
           trim: true,
+          strict: true,
+          locale: "en",
         }),
 
-        uploadedBy: findMember._id,
+        uploadedBy: String(findMember._id),
       });
 
       if (!success) {
@@ -85,13 +90,14 @@ class GalleryController {
       );
 
       if (!findEventBYName) {
-        throw new Error("Gallery data is missing");
+        throw new Error("Failed to Find Event By EventName");
       }
 
       let createGallery = await GalleryService.createNewGallery({
+        slug: data.slug,
         title: data.title,
         description: data.description,
-        event: data.event_Id,
+        event: String(findEventBYName._id),
         albumImageUrl: data.albumImageUrl,
         tags: data.tags,
         images: [],
@@ -107,10 +113,13 @@ class GalleryController {
         "Gallery Created Successfully",
       );
     } catch (error) {
+      console.log(error);
       let { errorData, message } = normalizeError(error);
       SendResponse.ErrorResponse(res, errorData, message);
     }
   };
+
+  
 }
 
 export default new GalleryController();

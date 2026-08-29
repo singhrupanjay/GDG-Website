@@ -7,6 +7,7 @@ import SendResponse from "../../../utils/SendResponse";
 import { eventService } from "./Event.Service";
 import { eventUtils } from "./Event.Utils";
 import { EventMode } from "./event.type";
+import normalizeError from "../../../utils/normalizeError";
 
 class EventController {
   public async create(req: Request, res: Response, next: NextFunction) {
@@ -246,6 +247,30 @@ class EventController {
         error,
         "Failed to fetch registration open events",
       );
+    }
+  }
+
+  public async FindAllEventName(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      let FindAllEventName = eventUtils.FindAllEventName();
+
+      if (!FindAllEventName) {
+        throw new Error("Failed to fetch the Event Name with Id from Db.");
+      }
+
+      SendResponse.SuccessResponse(
+        res,
+        FindAllEventName,
+        "Fetch all Event Name with Id",
+      );
+    } catch (error) {
+      let Error = normalizeError(error);
+
+      SendResponse.SuccessResponse(res, Error.errorData, Error.message);
     }
   }
 }
