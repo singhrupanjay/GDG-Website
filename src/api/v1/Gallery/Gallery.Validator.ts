@@ -29,7 +29,6 @@ export const CreateGallerySchema = z.object({
     .max(500, "Description must be under 500 characters")
     .trim(),
 
-  
   tags: z.array(z.string().trim()),
 
   visibility: z.enum(["public", "private"]).default("public"),

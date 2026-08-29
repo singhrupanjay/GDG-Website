@@ -6,7 +6,7 @@ class GalleryUtils {
       slug: Slug,
       visibility: "public",
       status: "published",
-      "images.featured": true
+      "images.featured": true,
     });
   };
 }

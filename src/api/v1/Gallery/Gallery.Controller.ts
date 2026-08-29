@@ -118,8 +118,6 @@ class GalleryController {
       SendResponse.ErrorResponse(res, errorData, message);
     }
   };
-
-  
 }
 
 export default new GalleryController();
