@@ -6,6 +6,13 @@ import {
   UpdateGallerySchema,
 } from "./Gallery.Validator";
 
+export interface ImageData {
+  url: string;
+  publicId: string;
+  caption: string;
+  featured: boolean;
+}
+
 export interface IGallery {
   title: string;
   slug?: string;

@@ -69,6 +69,63 @@ class GalleryService {
       throw new Error(error.message || "Failed to delete image");
     }
   }
+
+  async addImageToGallery(
+    galleryName: string,
+    imageUrl: string,
+    userId: string,
+    imageDetails: {
+      url: string;
+      publicId: string;
+      caption: string;
+      featured: boolean;
+    },
+  ) {
+    try {
+      const gallery = await Gallery.findOne({
+        title: galleryName,
+        uploadedBy: userId,
+      });
+
+      if (!gallery) {
+        throw new Error("Gallery not found or unauthorized access");
+      }
+
+      // 2. Check for duplicates (ensure the exact URL isn't already there)
+      const isDuplicate = gallery.images.some(
+        (img: any) => img.url === imageDetails.url,
+      );
+
+      if (isDuplicate) {
+        throw new Error("Image with this URL already exists in the gallery");
+      }
+
+      // 3. Push the new image with the specific structure
+      const updatedGallery = await Gallery.findOneAndUpdate(
+        { _id: gallery._id }, // Filter by ID
+        {
+          $push: {
+            images: {
+              url: imageDetails.url,
+              publicId: imageDetails.publicId,
+              caption: imageDetails.caption,
+              featured: imageDetails.featured,
+            },
+          },
+        },
+        { new: true, runValidators: true }, // Return updated doc
+      );
+
+      if (!updatedGallery) {
+        throw new Error("Failed to add image to gallery");
+      }
+
+      return updatedGallery;
+    } catch (error: any) {
+      console.error("Error adding image:", error);
+      throw new Error(error.message || "Failed to add image to gallery");
+    }
+  }
 }
 
 export default new GalleryService();

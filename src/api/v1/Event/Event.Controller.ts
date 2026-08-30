@@ -256,7 +256,7 @@ class EventController {
     next: NextFunction,
   ) {
     try {
-      let FindAllEventName = eventUtils.FindAllEventName();
+      let FindAllEventName = await eventUtils.FindAllEventName();
 
       if (!FindAllEventName) {
         throw new Error("Failed to fetch the Event Name with Id from Db.");

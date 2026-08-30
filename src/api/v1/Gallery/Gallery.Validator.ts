@@ -26,7 +26,7 @@ export const CreateGallerySchema = z.object({
   albumImageUrl: z.string().url("Album image URL must be a valid URL"),
   description: z
     .string()
-    .max(500, "Description must be under 500 characters")
+    .max(60, "Description must be under 500 characters")
     .trim(),
 
   tags: z.array(z.string().trim()),

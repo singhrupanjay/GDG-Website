@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import crypto from "crypto";
 import slugify from "slugify";
+import crypto from "crypto";
 import GalleryUtils from "./Gallery.Utils";
 import normalizeError from "../../../utils/normalizeError";
 import SendResponse from "../../../utils/SendResponse";
@@ -31,6 +31,41 @@ class GalleryController {
       SendResponse.SuccessResponse(res, findGallery, "Fetch Gallery By Slug");
     } catch (error: any) {
       SendResponse.ErrorResponse(res, error, error.message);
+    }
+  };
+
+  FIND_ALL_GALLERY = async (req: Request, res: Response) => {
+    try {
+      const { Page, Limit } = req.query;
+
+      const page = Number(Page) || 1;
+      const limit = Number(Limit) || 10;
+
+      if (!Number.isInteger(page) || !Number.isInteger(limit)) {
+        throw new Error("Page and Limit must be valid numbers");
+      }
+
+      if (page < 1 || limit < 1) {
+        throw new Error("Page and Limit must be greater than 0");
+      }
+
+      const findGallery = await GalleryUtils.FIND_ALL_GALLERY(page, limit);
+
+      if (!findGallery) {
+        throw new Error("Failed to fetch gallery");
+      }
+
+      SendResponse.SuccessResponse(
+        res,
+        findGallery,
+        "Fetch All Gallery Successfully",
+      );
+    } catch (error: any) {
+      SendResponse.ErrorResponse(
+        res,
+        error,
+        error.message || "Failed to fetch gallery",
+      );
     }
   };
 
@@ -67,12 +102,15 @@ class GalleryController {
       let { success, data, error } = await CreateGallerySchema.safeParseAsync({
         ...req.body,
 
-        slug: slugify(req.body.title + crypto.randomBytes(4).toString("hex"), {
-          lower: true,
-          trim: true,
-          strict: true,
-          locale: "en",
-        }),
+        slug: slugify(
+          req.body.title + "-" + crypto.randomBytes(4).toString("hex"),
+          {
+            lower: true,
+            trim: true,
+            strict: true,
+            locale: "en",
+          },
+        ),
 
         uploadedBy: String(findMember._id),
       });

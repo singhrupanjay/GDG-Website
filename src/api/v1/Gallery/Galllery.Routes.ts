@@ -10,4 +10,8 @@ routes.post(
   GalleryController.Create_New_Gallery,
 );
 
+routes.get("/findGalleryBySlug", GalleryController.FIND_SINGLE_GALLERY);
+
+routes.get("/findAllGallery", GalleryController.FIND_ALL_GALLERY);
+
 export { routes as GalleryRoutes };

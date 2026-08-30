@@ -16,7 +16,7 @@ class EventUtils {
   }
 
   async FindAllEventName() {
-    EventModel.find().select("title").lean();
+    return EventModel.find().select("-_id title").lean();
   }
 
   async FIND_ALL_EVENT(page: number, limit: number) {
