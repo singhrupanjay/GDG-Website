@@ -42,6 +42,7 @@ const GallerySchema = new Schema<IGallery>(
         },
         publicId: {
           type: String,
+          ref: "Member",
           required: true,
         },
         caption: {

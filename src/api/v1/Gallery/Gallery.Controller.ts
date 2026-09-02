@@ -156,6 +156,25 @@ class GalleryController {
       SendResponse.ErrorResponse(res, errorData, message);
     }
   };
+
+  AddImageToGallery = async (req: Request, res: Response) => {
+    try {
+      let { galleryName, imageDetails } = req.body;
+      let findGallery = await GalleryUtils.FIND_GALLERY_BY_NAME(galleryName);
+
+      if (!findGallery) {
+        throw new Error("Failed to find Gallery");
+      }
+
+      const isDuplicate = findGallery.images.some(
+        (img: any) => img.url === imageDetails.url,
+      );
+
+      if (isDuplicate) {
+        throw new Error("Image with this URL already exists in the gallery");
+      }
+    } catch (error) {}
+  };
 }
 
 export default new GalleryController();

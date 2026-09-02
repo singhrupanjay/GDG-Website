@@ -28,6 +28,12 @@ class GalleryUtils {
 
     return albums;
   };
+
+  FIND_GALLERY_BY_NAME = async (galleryName: string) => {
+    return await Gallery.findOne({
+      title: galleryName,
+    });
+  };
 }
 
 export default new GalleryUtils();
