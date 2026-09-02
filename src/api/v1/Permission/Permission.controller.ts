@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import SendResponse from "../../../utils/SendResponse";
 import { permissionService } from "./Permission.service";
 import { Permission_Permissions } from "./Permission.constant";
+import { authUtils } from "../Auth/Auth.Utils";
 
 class PermissionController {
   async getUserPermissions(req: Request, res: Response) {
@@ -47,6 +48,14 @@ class PermissionController {
           res,
           null,
           "Expected array of permissions",
+        );
+      }
+
+      let findUser = await authUtils.getUserById(memberId);
+
+      if (!findUser) {
+        throw new Error(
+          "Failed to find Member please pass the Correct Member Id to add Permission",
         );
       }
 

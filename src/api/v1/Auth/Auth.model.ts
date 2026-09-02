@@ -75,7 +75,7 @@ export const AuthSchema = new mongoose.Schema<AuthType>(
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Member",
       index: true,
     },
   },

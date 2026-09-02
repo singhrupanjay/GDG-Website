@@ -8,80 +8,54 @@ const objectIdSchema = z
 const ImageSchema = z.object({
   url: z.string().url("Image URL must be a valid URL"),
   publicId: z.string().min(1, "Public ID is required"),
-  alt: z.string().min(1, "Alt text is required"),
-  caption: z.string().optional(),
+  caption: z.string().min(1, "Caption is required"),
   featured: z.boolean().default(false),
 });
 
-const GalleryBaseSchema = z.object({
+export const CreateGallerySchema = z.object({
   title: z
     .string()
     .min(1, "Title is required")
     .max(100, "Title must be under 100 characters")
     .trim(),
 
-  slug: z.string().min(1, "Slug is required").max(100).trim().toLowerCase(),
+  EventName: z.string(),
+
+  slug: z.string().min(1, "Slug is required").max(100).trim(),
 
   albumImageUrl: z.string().url("Album image URL must be a valid URL"),
-
   description: z
     .string()
-    .max(500, "Description must be under 500 characters")
-    .trim()
-    .optional()
-    .or(z.literal("")), // Allow empty string
+    .max(60, "Description must be under 500 characters")
+    .trim(),
 
-  event: objectIdSchema.optional().nullable(),
-
-  tags: z.array(z.string().trim().toLowerCase()).optional(),
+  tags: z.array(z.string().trim()),
 
   visibility: z.enum(["public", "private"]).default("public"),
+  imageCount: z.number().default(0).optional(),
 
   status: z.enum(["draft", "published"]).default("draft"),
 
-  uploadedBy: objectIdSchema.optional(),
-
-  isDeleted: z.boolean().optional().default(false),
+  uploadedBy: objectIdSchema,
+  isDeleted: z.boolean().default(false),
 });
 
-export const CreateGallerySchema = GalleryBaseSchema.pick({
-  title: true,
-  slug: true,
-  description: true,
-  event: true,
-  tags: true,
-  visibility: true,
-  status: true,
-  uploadedBy: true,
-  albumImageUrl: true, // Added explicitly
-}).extend({
-  images: z.array(ImageSchema).min(1, "At least one image is required"),
-  // Added imageCount as required by IGallery
-  imageCount: z.number().int().min(0, "Image count must be a positive integer"),
-});
-
-export const UpdateGallerySchema = GalleryBaseSchema.partial().extend({
+export const UpdateGallerySchema = CreateGallerySchema.partial().extend({
   images: z.array(ImageSchema).optional(),
   imageCount: z.number().int().min(0).optional(),
-
-  title: GalleryBaseSchema.shape.title.optional(),
-  slug: GalleryBaseSchema.shape.slug.optional(),
-  description: GalleryBaseSchema.shape.description.optional(),
-  event: GalleryBaseSchema.shape.event.optional(),
-  tags: GalleryBaseSchema.shape.tags.optional(),
-  visibility: GalleryBaseSchema.shape.visibility.optional(),
-  status: GalleryBaseSchema.shape.status.optional(),
+  // Explicitly allow partial updates for required fields if needed
+  title: z.string().optional(),
+  slug: z.string().optional(),
+  uploadedBy: objectIdSchema.optional(),
   albumImageUrl: z.string().url().optional(),
 });
 
-// --- Add Image Schema ---
 export const AddImageToGallerySchema = z.object({
   galleryId: objectIdSchema,
-  image: ImageSchema, // Changed from imageUrl to full image object
+  image: ImageSchema,
 });
 
-// --- Remove Image Schema ---
 export const RemoveImageFromGallerySchema = z.object({
   galleryId: objectIdSchema,
-  publicId: z.string().min(1, "Image Public ID is required"), // Use publicId for safe deletion
+  publicId: z.string().min(1, "Image Public ID is required"),
 });

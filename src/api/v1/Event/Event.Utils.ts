@@ -6,13 +6,33 @@ class EventUtils {
     "Slug coverImageUrl title shortDescription redirectUrl tags registrationStartAt registrationEndAt";
 
   async FindEventById(eventId: string) {
-    const event = await EventModel.findById(eventId);
+    const event = await EventModel.findById(eventId).lean();
 
     if (!event) {
       throw new Error("Event not found");
     }
 
     return event;
+  }
+
+  async FindAllEventName() {
+    return EventModel.find().select("-_id title").lean();
+  }
+
+  async FIND_ALL_EVENT(page: number, limit: number) {
+    const pageNumber = page - 1;
+
+    console.log("limit", limit);
+
+    const events = await EventModel.find()
+      .select(
+        "Slug registrationStartAt title category venue.venueName venue.address visibility coverImageUrl status",
+      )
+      .limit(limit)
+      .skip(pageNumber * limit)
+      .lean();
+
+    return events;
   }
 
   async FIND_UPCOMING_EVENTS() {
@@ -69,6 +89,10 @@ class EventUtils {
       .sort({ registrationEndAt: -1 })
       .select(this.SELECT_FIELDS)
       .lean();
+  }
+
+  async FIND_EVENT_BY_NAME(name: string) {
+    return EventModel.findOne({ title: name });
   }
 
   async FIND_EVENT_BY_SLUG(Slug: string) {

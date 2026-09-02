@@ -22,6 +22,10 @@ class MemberUtils {
     return await MemberModel.findOne({ Slug: Slug });
   };
 
+  FIND_Member_ID_By_UserId = async (userId: string) => {
+    return await MemberModel.findOne({ AuthId: userId }).select("_id");
+  };
+
   FIND_Member_BY_EMAIL = async (Email: string) => {
     return await MemberModel.findOne({ email: Email });
   };

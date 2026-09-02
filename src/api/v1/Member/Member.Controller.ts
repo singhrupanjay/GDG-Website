@@ -12,6 +12,7 @@ import { Member_Permissions } from "../Permission/Permission.constant";
 
 import slugify from "slugify";
 import MemberChannel from "./Member.Channel";
+import { authUtils } from "../Auth/Auth.Utils";
 
 class MemberController {
   createNewMember = async (req: Request, res: Response) => {

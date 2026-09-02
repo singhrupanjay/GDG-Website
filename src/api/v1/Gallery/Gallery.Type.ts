@@ -2,10 +2,16 @@ import { Types } from "mongoose";
 import z from "zod";
 import {
   AddImageToGallerySchema,
-  CreateGallerySchema,
   RemoveImageFromGallerySchema,
   UpdateGallerySchema,
 } from "./Gallery.Validator";
+
+export interface ImageData {
+  url: string;
+  publicId: string;
+  caption: string;
+  featured: boolean;
+}
 
 export interface IGallery {
   title: string;
@@ -16,7 +22,7 @@ export interface IGallery {
 
   albumImageUrl: string;
 
-  event: Types.ObjectId;
+  event: string;
 
   images: {
     url: string;
@@ -32,12 +38,12 @@ export interface IGallery {
 
   status: "draft" | "published";
 
-  uploadedBy: Types.ObjectId;
+  uploadedBy?: string;
 
-  isDeleted: boolean;
+  isDeleted?: boolean;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type UateGpdalleryProps = z.infer<typeof UpdateGallerySchema>;

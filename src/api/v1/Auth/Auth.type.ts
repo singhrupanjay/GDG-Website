@@ -15,6 +15,7 @@ export type RefreshTokenType = {
 };
 
 export type AuthType = {
+  _id?: string;
   email: string;
   passwordHash: string;
   emailVerified: boolean;

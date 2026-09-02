@@ -7,11 +7,13 @@ import SendResponse from "../../../utils/SendResponse";
 import { eventService } from "./Event.Service";
 import { eventUtils } from "./Event.Utils";
 import { EventMode } from "./event.type";
+import normalizeError from "../../../utils/normalizeError";
 
 class EventController {
   public async create(req: Request, res: Response, next: NextFunction) {
     try {
       let userId = (req as Request & { userId?: string }).userId;
+      console.log(req.body);
 
       console.log("User ID:--->", userId); // Log the userId to verify it's being set correctly
 
@@ -39,6 +41,7 @@ class EventController {
         "Event created successfully",
       );
     } catch (error) {
+      console.log(error);
       const errorMessage =
         error instanceof Error ? error.message : "An unexpected error occurred";
 
@@ -89,6 +92,51 @@ class EventController {
         error instanceof Error ? error.message : "An unexpected error occurred";
 
       console.error("Error in Find_Event_By_Slug:", error);
+
+      return SendResponse.ErrorResponse(res, error, errorMessage);
+    }
+  }
+
+  public async Find_All_Event(req: Request, res: Response) {
+    try {
+      let userId = (req as Request & { userId?: string }).userId;
+
+      if (!userId) throw new Error("User Not Authenticated");
+
+      let checkPermissions = await permissionService.check_UserPermission(
+        String(userId),
+        Event_Permissions.VIEW_EVENT,
+      );
+
+      if (!checkPermissions) {
+        throw new Error(
+          "Forbidden: You don't have permission to find all event",
+        );
+      }
+
+      const { Limit, Page } = req.query;
+
+      if (!Limit || !Page) {
+        throw new Error("Limit and Page are required");
+      }
+
+      const limit = Number(Limit);
+      const page = Number(Page);
+
+      if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
+        throw new Error("Limit and Page must be positive numbers");
+      }
+
+      const findAllEvent = await eventUtils.FIND_ALL_EVENT(page, limit);
+
+      SendResponse.SuccessResponse(
+        res,
+        findAllEvent,
+        "Event fetch successfully",
+      );
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
 
       return SendResponse.ErrorResponse(res, error, errorMessage);
     }
@@ -199,6 +247,30 @@ class EventController {
         error,
         "Failed to fetch registration open events",
       );
+    }
+  }
+
+  public async FindAllEventName(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      let FindAllEventName = await eventUtils.FindAllEventName();
+
+      if (!FindAllEventName) {
+        throw new Error("Failed to fetch the Event Name with Id from Db.");
+      }
+
+      SendResponse.SuccessResponse(
+        res,
+        FindAllEventName,
+        "Fetch all Event Name with Id",
+      );
+    } catch (error) {
+      let Error = normalizeError(error);
+
+      SendResponse.SuccessResponse(res, Error.errorData, Error.message);
     }
   }
 }
