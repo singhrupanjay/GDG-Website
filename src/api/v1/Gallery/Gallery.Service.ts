@@ -81,9 +81,6 @@ class GalleryService {
     },
   ) {
     try {
-    
-
-      
       const updatedGallery = await Gallery.findOneAndUpdate(
         { _id: galleryId }, // Filter by ID
         {
