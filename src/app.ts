@@ -25,7 +25,7 @@ const limiter = rateLimit({
 
 app.use(
   cors({
-    origin: isProduction ? "https://commdesk.app" : "http://localhost:5173",
+    origin: env_Constant.FRONTEND_URL,
     credentials: true,
   }),
 );
