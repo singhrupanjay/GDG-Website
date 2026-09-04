@@ -10,6 +10,8 @@ import { GalleryRoutes } from "../api/v1/Gallery/Galllery.Routes";
 
 const route = Router();
 
+
+
 route.use(
   "/api/v1",
   HealthRoutes,

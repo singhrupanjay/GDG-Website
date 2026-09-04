@@ -24,27 +24,23 @@ class AuthController {
     res: Response,
     tokens: { accessToken: string; refreshToken: string },
   ) {
-    console.log("Setting auth cookies and headers with tokens:", tokens);
     const isProd = env_Constant.NODE_ENV === "production";
 
     const commonOptions = {
       httpOnly: true,
       secure: isProd,
-      sameSite: "strict" as const,
+      sameSite: (isProd ? "none" : "lax") as "none" | "lax",
     };
 
-    // 1. Set Access Token (Short-lived)
     res.cookie("accessToken", tokens.accessToken, {
       ...commonOptions,
-      maxAge: 15 * 60 * 1000, // 15 mins
+      maxAge: 15 * 60 * 60 * 1000,
     });
 
-    // 2. Set Refresh Token (Long-lived)
-    // Optimization: Only send this cookie when the user hits the /refresh route
     res.cookie("refreshToken", tokens.refreshToken, {
       ...commonOptions,
-      path: "/api/auth/refresh", // Browser only sends it to this specific URL
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: "/api/auth/refresh",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   }
 
