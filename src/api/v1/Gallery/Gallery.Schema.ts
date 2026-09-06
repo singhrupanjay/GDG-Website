@@ -75,7 +75,7 @@ const GallerySchema = new Schema<IGallery>(
     },
     uploadedBy: {
       type: Schema.Types.ObjectId,
-      ref: "Member",
+      ref: "Auth",
       required: true,
     },
     isDeleted: {

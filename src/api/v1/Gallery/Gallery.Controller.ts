@@ -90,14 +90,7 @@ class GalleryController {
         );
       }
 
-      let findMember = await memberUtils.FIND_Member_ID_By_UserId(
-        String(userId),
-      );
-      if (!findMember) {
-        throw new Error(
-          "Forbidden: You can't Create the Gallery Becouse this Feature is only for Member",
-        );
-      }
+    
 
       let { success, data, error } = await CreateGallerySchema.safeParseAsync({
         ...req.body,
@@ -112,7 +105,7 @@ class GalleryController {
           },
         ),
 
-        uploadedBy: String(findMember._id),
+        uploadedBy: String(userId),
       });
 
       if (!success) {
