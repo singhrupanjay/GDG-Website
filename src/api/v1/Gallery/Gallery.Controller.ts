@@ -90,8 +90,6 @@ class GalleryController {
         );
       }
 
-    
-
       let { success, data, error } = await CreateGallerySchema.safeParseAsync({
         ...req.body,
 
