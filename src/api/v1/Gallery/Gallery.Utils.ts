@@ -2,6 +2,7 @@ import { Gallery } from "./Gallery.Schema";
 
 class GalleryUtils {
   FIND_Gallery_By_Slug = async (Slug: string) => {
+    console.log("Slug", Slug);
     return await Gallery.findOne({
       slug: Slug,
       visibility: "public",
