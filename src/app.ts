@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: env_Constant.FRONTEND_URL.split(",").map((s) => s.trim()),
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
+    methods: ["GET", "POST", "PUT", "DELETE"],
   }),
 );
 
