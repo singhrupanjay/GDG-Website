@@ -42,14 +42,9 @@ class EventController {
       );
     } catch (error) {
       console.log(error);
-      const errorMessage =
-        error instanceof Error ? error.message : "An unexpected error occurred";
+      const Error = normalizeError(error);
 
-      return SendResponse.ErrorResponse(
-        res,
-        new Error(errorMessage),
-        "Failed to Create  Event",
-      );
+      return SendResponse.ErrorResponse(res, Error.errorData, Error.message);
     }
   }
 

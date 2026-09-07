@@ -4,7 +4,6 @@ import { EVENT_TYPE } from "./Event.Constant";
 
 export const EventValidate = z.object({
   Slug: z.string().min(3).max(100).optional(),
-  communityId: z.string().length(24),
   title: z.string().min(5).max(100),
   shortDescription: z.string().min(10).max(200),
   descriptionMarkdown: z.string().min(20),

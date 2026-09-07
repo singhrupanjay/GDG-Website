@@ -8,9 +8,9 @@ import {
 
 class EventService {
   createNewEvent(eventData: EventType): Promise<unknown> {
-    EventValidate.parse(eventData);
+    let Data = EventValidate.parse(eventData);
 
-    let CreateEvent = EventModel.create(eventData);
+    let CreateEvent = EventModel.create(Data);
 
     return CreateEvent;
   }

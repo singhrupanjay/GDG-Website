@@ -19,12 +19,7 @@ const EventSchema = new Schema(
       index: true,
     },
 
-    communityId: {
-      type: Types.ObjectId,
-      ref: "Community",
-      required: true,
-      index: true,
-    },
+   
 
     createdBy: {
       type: Types.ObjectId,
