@@ -48,13 +48,15 @@ class EventUtils {
   ) {
     const currentPage = Math.max(1, Number(page) || 1);
     const currentLimit = Math.min(50, Math.max(1, Number(limit) || 10));
-
     const skip = (currentPage - 1) * currentLimit;
 
     const query: Record<string, unknown> = {
       visibility: filters.visibility || "PUBLIC",
-      status: filters.status || "PUBLISHED",
     };
+
+    if (filters.status?.trim()) {
+      query.status = filters.status;
+    }
 
     if (filters.search?.trim()) {
       const search = new RegExp(filters.search.trim(), "i");
@@ -73,7 +75,7 @@ class EventUtils {
       };
     }
 
-    if (filters.category) {
+    if (filters.category?.trim()) {
       query.category = filters.category;
     }
 
