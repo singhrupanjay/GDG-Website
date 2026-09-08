@@ -17,6 +17,7 @@ router.get(
 
 router.get("/findAllEventName", eventController.FindAllEventName);
 
+router.get("/events", eventController.Find_All_Event_With_Filter);
 router.get("/event/:Slug", eventController.Find_Event_By_Slug);
 router.get("/find/pastEvents", eventController.Find_PastEvents);
 

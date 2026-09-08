@@ -14,6 +14,17 @@ export type RefreshTokenType = {
   createdAt?: Date;
 };
 
+export interface AccessTokenPayload {
+  data: {
+    _id: string;
+    email: string;
+    role: string;
+    ip?: string;
+  };
+  iat: number;
+  exp: number;
+}
+
 export type AuthType = {
   _id?: string;
   email: string;
