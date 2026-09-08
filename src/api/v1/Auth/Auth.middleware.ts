@@ -23,7 +23,7 @@ class AuthMiddleware {
 
       const token = req.cookies?.accessToken || bearerToken;
 
-      console.log('Token' , token)
+      console.log("Token", token);
 
       if (!token) {
         throw new Error("Unauthorized: No token provided");
@@ -33,7 +33,7 @@ class AuthMiddleware {
 
       const userId = decodedData.data?._id;
 
-       console.log('User Id' , userId)
+      console.log("User Id", userId);
 
       if (!userId) {
         throw new Error("Unauthorized: Invalid token");

@@ -6,12 +6,11 @@ const objectIdSchema = z
   .string()
   .regex(/^[a-f\d]{24}$/i, "Invalid MongoDB ObjectId");
 
-const dateSchema = z.string().refine(
-  (date) => !Number.isNaN(Date.parse(date)),
-  {
+const dateSchema = z
+  .string()
+  .refine((date) => !Number.isNaN(Date.parse(date)), {
     message: "Invalid date format",
-  },
-);
+  });
 
 const timelineItemSchema = z
   .object({
@@ -83,20 +82,13 @@ const eventBaseSchema = z.object({
 
   redirectUrl: z.string().url().optional(),
 
-  tags: z
-    .array(z.string().trim().min(1).max(50))
-    .max(20)
-    .default([]),
+  tags: z.array(z.string().trim().min(1).max(50)).max(20).default([]),
 
   category: z.enum(EVENT_TYPE),
 
-  visibility: z
-    .enum(EventVisibility)
-    .default(EventVisibility.PUBLIC),
+  visibility: z.enum(EventVisibility).default(EventVisibility.PUBLIC),
 
-  status: z
-    .enum(EventStatus)
-    .default(EventStatus.REGISTRATION_OPEN),
+  status: z.enum(EventStatus).default(EventStatus.REGISTRATION_OPEN),
 
   coverImageUrl: z.string().url().optional(),
 
@@ -120,15 +112,9 @@ const eventBaseSchema = z.object({
 
   timeline: z.array(timelineItemSchema).max(100).default([]),
 
-  rules: z
-    .array(z.string().trim().min(5).max(500))
-    .max(50)
-    .default([]),
+  rules: z.array(z.string().trim().min(5).max(500)).max(50).default([]),
 
-  requirements: z
-    .array(z.string().trim().min(3).max(500))
-    .max(50)
-    .default([]),
+  requirements: z.array(z.string().trim().min(3).max(500)).max(50).default([]),
 });
 
 type EventDateValidationData = {
@@ -182,8 +168,7 @@ const validateDates = (
     if (timelineEnd > registrationEnd) {
       ctx.addIssue({
         code: "custom",
-        message:
-          "Timeline end cannot be after registration end date and time",
+        message: "Timeline end cannot be after registration end date and time",
         path: ["timeline", index, "endAt"],
       });
     }
@@ -203,9 +188,7 @@ export const updateEventValidator = eventBaseSchema
   })
   .strict()
   .superRefine((data, ctx) => {
-    const updateFields = Object.keys(data).filter(
-      (key) => key !== "updatedBy",
-    );
+    const updateFields = Object.keys(data).filter((key) => key !== "updatedBy");
 
     if (updateFields.length === 0) {
       ctx.addIssue({
@@ -229,9 +212,7 @@ const eventTagsQuerySchema = z
 
     const tags = Array.isArray(value) ? value : value.split(",");
 
-    const normalizedTags = tags
-      .map((tag) => tag.trim())
-      .filter(Boolean);
+    const normalizedTags = tags.map((tag) => tag.trim()).filter(Boolean);
 
     return normalizedTags.length ? normalizedTags : undefined;
   });
@@ -262,17 +243,11 @@ export const EventIdParamsSchema = z.object({
 
 export type EventType = z.infer<typeof EventValidate>;
 
-export type UpdateEventType = z.infer<
-  typeof updateEventValidator
->;
+export type UpdateEventType = z.infer<typeof updateEventValidator>;
 
-export type FindAllEventQuery = z.infer<
-  typeof FindAllEventQuerySchema
->;
+export type FindAllEventQuery = z.infer<typeof FindAllEventQuerySchema>;
 
-export type TimelineItem = z.infer<
-  typeof timelineItemSchema
->;
+export type TimelineItem = z.infer<typeof timelineItemSchema>;
 
 export type Ticket = z.infer<typeof ticketSchema>;
 
