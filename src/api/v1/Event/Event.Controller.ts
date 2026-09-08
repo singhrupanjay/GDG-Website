@@ -8,43 +8,56 @@ import { eventService } from "./Event.Service";
 import { eventUtils } from "./Event.Utils";
 import { EventMode } from "./event.type";
 import normalizeError from "../../../utils/normalizeError";
+import { FindAllEventQuerySchema } from "./Event.Validate";
 
 class EventController {
   public async create(req: Request, res: Response, next: NextFunction) {
     try {
-      let userId = (req as Request & { userId?: string }).userId;
-      console.log(req.body);
+      const userId = (req as Request & { userId?: string }).userId;
 
-      console.log("User ID:--->", userId); // Log the userId to verify it's being set correctly
+      if (!userId) {
+        throw new Error("User Id is Required");
+      }
 
-      let checkPermissions = await permissionService.check_UserPermission(
-        String(userId),
+      const hasPermission = await permissionService.check_UserPermission(
+        userId,
         Event_Permissions.CREATE_EVENT,
       );
-      if (!checkPermissions) {
+
+      if (!hasPermission) {
         throw new Error(
           "Forbidden: You don't have permission to create events",
         );
       }
 
-      let CreateEvent = await eventService.createNewEvent({
-        Slug: slugify(
-          req.body.title + "-" + crypto.randomBytes(4).toString("hex"),
-          { lower: true },
-        ),
-        createdBy: String(userId),
+      const event = await eventService.createNewEvent({
         ...req.body,
+        Slug: slugify(
+          `${req.body.title}-${crypto.randomBytes(4).toString("hex")}`,
+          {
+            lower: true,
+            strict: true,
+            trim: true,
+          },
+        ),
+        createdBy: userId,
       });
-      SendResponse.SuccessResponse(
+
+      return SendResponse.SuccessResponse(
         res,
-        CreateEvent,
+        event,
         "Event created successfully",
       );
     } catch (error) {
-      console.log(error);
-      const Error = normalizeError(error);
+      console.error(error);
 
-      return SendResponse.ErrorResponse(res, Error.errorData, Error.message);
+      const normalizedError = normalizeError(error);
+
+      return SendResponse.ErrorResponse(
+        res,
+        normalizedError.errorData,
+        normalizedError.message,
+      );
     }
   }
 
@@ -134,6 +147,30 @@ class EventController {
         error instanceof Error ? error.message : "An unexpected error occurred";
 
       return SendResponse.ErrorResponse(res, error, errorMessage);
+    }
+  }
+
+  public async Find_All_Event_With_Filter(req: Request, res: Response) {
+    try {
+      const { page, limit, ...filters } = FindAllEventQuerySchema.parse(
+        req.query,
+      );
+
+      const events = await eventUtils.FIND_ALL_EVENT_With_Filter(
+        page,
+        limit,
+        filters,
+      );
+
+      SendResponse.SuccessResponse(res, events, "Events fetched successfully");
+    } catch (error) {
+      const normalizedError = normalizeError(error);
+
+      SendResponse.ErrorResponse(
+        res,
+        normalizedError.errorData,
+        normalizedError.message,
+      );
     }
   }
 

@@ -21,14 +21,14 @@ const EventSchema = new Schema(
 
     createdBy: {
       type: Types.ObjectId,
-      ref: "User",
+      ref: "Auth",
       required: true,
       index: true,
     },
 
     updatedBy: {
       type: Types.ObjectId,
-      ref: "User",
+      ref: "Auth",
     },
 
     /* -------------------------------------------------------------------------- */

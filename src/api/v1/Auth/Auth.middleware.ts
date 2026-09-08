@@ -1,17 +1,29 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { authUtils } from "./Auth.Utils";
 import SendResponse from "../../../utils/SendResponse";
+import normalizeError from "../../../utils/normalizeError";
+import type { Request } from "express";
+
+export type AuthenticatedRequest = Request & {
+  userId?: string;
+};
 
 class AuthMiddleware {
-  async verifyAccessToken(req: Request, res: Response, next: NextFunction) {
+  public verifyAccessToken = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
-      console.log(
-        "req.headers.authorization-->",
-        req.headers.authorization,
-        req.cookies,
-      );
-      const token =
-        req.headers.authorization?.split(" ")[1] || req.cookies?.accessToken;
+      const authorization = req.headers.authorization;
+
+      const bearerToken = authorization?.startsWith("Bearer ")
+        ? authorization.slice(7).trim()
+        : undefined;
+
+      const token = req.cookies?.accessToken || bearerToken;
+
+      console.log("Token", token);
 
       if (!token) {
         throw new Error("Unauthorized: No token provided");
@@ -19,21 +31,23 @@ class AuthMiddleware {
 
       const decodedData = await authUtils.verifyAccessToken(token);
 
-      console.log("decodedData-->", decodedData, req.cookies);
+      const userId = decodedData.data?._id;
 
-      if (!decodedData) {
+      console.log("User Id", userId);
+
+      if (!userId) {
         throw new Error("Unauthorized: Invalid token");
       }
 
-      const userId = (decodedData as { data: { _id: string } }).data._id;
-
-      (req as Request & { userId?: string }).userId = userId;
+      req.userId = userId;
 
       next();
     } catch (error) {
-      SendResponse.ErrorResponse(res, error, "Unauthorized: Invalid token");
+      const normalizedError = normalizeError(error);
+
+      SendResponse.ErrorResponse(res, normalizedError, normalizedError.message);
     }
-  }
+  };
 }
 
 export default new AuthMiddleware();

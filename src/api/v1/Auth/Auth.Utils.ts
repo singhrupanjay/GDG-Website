@@ -4,7 +4,7 @@ import argon2 from "argon2";
 import path from "path";
 import fs from "fs";
 import { env_Constant } from "../../../constant/env.constant";
-import { AuthType, OtpTemplateType } from "./Auth.type";
+import { AccessTokenPayload, AuthType, OtpTemplateType } from "./Auth.type";
 
 class AuthUtils {
   public async FIND_USER_BY_EMAIL(email: string) {
@@ -120,12 +120,23 @@ class AuthUtils {
     return OtpTemplate;
   };
 
-  public async verifyAccessToken(token: string) {
+  public async verifyAccessToken(token: string): Promise<AccessTokenPayload> {
     try {
       const decoded = jwt.verify(token, env_Constant.JWT_ACCESS_SECRET);
-      return decoded;
-    } catch (error) {
-      throw new Error("Invalid access token");
+
+      if (
+        typeof decoded === "string" ||
+        !decoded.data ||
+        !decoded.data._id ||
+        !decoded.data.email ||
+        !decoded.data.role
+      ) {
+        throw new Error("Invalid access token payload");
+      }
+
+      return decoded as AccessTokenPayload;
+    } catch {
+      throw new Error("Invalid or expired access token");
     }
   }
 
