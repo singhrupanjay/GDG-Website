@@ -2,12 +2,11 @@ import { z } from "zod";
 import { EventMode, EventStatus, EventVisibility } from "./event.type";
 import { EVENT_TYPE } from "./Event.Constant";
 
-const dateSchema = z.string().refine(
-  (date) => !Number.isNaN(Date.parse(date)),
-  {
+const dateSchema = z
+  .string()
+  .refine((date) => !Number.isNaN(Date.parse(date)), {
     message: "Invalid date format",
-  },
-);
+  });
 
 const timelineItemSchema = z
   .object({
@@ -57,13 +56,9 @@ const validateDates = (
   ctx: z.RefinementCtx,
 ) => {
   if (data.registrationStartAt && data.registrationEndAt) {
-    const registrationStartAt = new Date(
-      data.registrationStartAt,
-    ).getTime();
+    const registrationStartAt = new Date(data.registrationStartAt).getTime();
 
-    const registrationEndAt = new Date(
-      data.registrationEndAt,
-    ).getTime();
+    const registrationEndAt = new Date(data.registrationEndAt).getTime();
 
     if (registrationEndAt <= registrationStartAt) {
       ctx.addIssue({
