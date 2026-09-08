@@ -59,13 +59,9 @@ const validateDates = (
     return;
   }
 
-  const registrationStartAt = new Date(
-    data.registrationStartAt,
-  ).getTime();
+  const registrationStartAt = new Date(data.registrationStartAt).getTime();
 
-  const registrationEndAt = new Date(
-    data.registrationEndAt,
-  ).getTime();
+  const registrationEndAt = new Date(data.registrationEndAt).getTime();
 
   if (registrationEndAt <= registrationStartAt) {
     ctx.addIssue({
@@ -96,8 +92,7 @@ const validateDates = (
     if (timelineEndAt > registrationEndAt) {
       ctx.addIssue({
         code: "custom",
-        message:
-          "Timeline end cannot be after registration end date and time",
+        message: "Timeline end cannot be after registration end date and time",
         path: ["timeline", index, "endAt"],
       });
     }
