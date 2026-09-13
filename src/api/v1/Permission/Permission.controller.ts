@@ -142,6 +142,22 @@ class PermissionController {
       );
     }
   }
+  async deletePermission(req: Request, res: Response) {
+    try {
+      const { permissionId } = req.params;
+      
+      const result = await permissionService.deletePermissionDoc(
+        String(permissionId)
+      );
+      return SendResponse.SuccessResponse(res, result, "Permission document deleted completely");
+    } catch (error: any) {
+      return SendResponse.ErrorResponse(
+        res,
+        error,
+        error?.message || "Failed to delete permission",
+      );
+    }
+  }
 }
 
 export const permissionController = new PermissionController();

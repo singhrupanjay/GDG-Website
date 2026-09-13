@@ -150,21 +150,62 @@ class GalleryController {
 
   AddImageToGallery = async (req: Request, res: Response) => {
     try {
-      let { galleryName, imageDetails } = req.body;
-      let findGallery = await GalleryUtils.FIND_GALLERY_BY_NAME(galleryName);
-
+      let userId = (req as Request & { userId?: string }).userId;
+      if (!userId) {
+        throw new Error("User ID not found in request");
+      }
+      
+      let { galleryId, imageDetails } = req.body;
+      let findGallery = await GalleryUtils.FIND_GALLERY_BY_ID(galleryId);
       if (!findGallery) {
         throw new Error("Failed to find Gallery");
       }
-
       const isDuplicate = findGallery.images.some(
         (img: any) => img.url === imageDetails.url,
       );
-
       if (isDuplicate) {
         throw new Error("Image with this URL already exists in the gallery");
       }
-    } catch (error) {}
+      
+      const result = await GalleryService.addImageToGallery(galleryId, userId, imageDetails);
+      SendResponse.SuccessResponse(res, result, "Image added to album successfully");
+    } catch (error: any) {
+      SendResponse.ErrorResponse(res, error, error.message || "Failed to add image");
+    }
+  };
+
+  DeleteImageFromGallery = async (req: Request, res: Response) => {
+    try {
+      let userId = (req as Request & { userId?: string }).userId;
+      if (!userId) {
+        throw new Error("User ID not found in request");
+      }
+      const { galleryId, imageUrl } = req.body;
+      if (!galleryId || !imageUrl) {
+        throw new Error("Gallery ID and Image URL are required");
+      }
+      const result = await GalleryService.deleteImageFromGallery(galleryId, imageUrl, userId);
+      SendResponse.SuccessResponse(res, result, "Image deleted from album successfully");
+    } catch (error: any) {
+      SendResponse.ErrorResponse(res, error, error.message || "Failed to delete image");
+    }
+  };
+
+  UpdateImageInGallery = async (req: Request, res: Response) => {
+    try {
+      let userId = (req as Request & { userId?: string }).userId;
+      if (!userId) {
+        throw new Error("User ID not found in request");
+      }
+      const { galleryId, imageUrl, updateData } = req.body;
+      if (!galleryId || !imageUrl || !updateData) {
+        throw new Error("Gallery ID, Image URL, and Update Data are required");
+      }
+      const result = await GalleryService.updateImageInGallery(galleryId, imageUrl, updateData, userId);
+      SendResponse.SuccessResponse(res, result, "Image updated in album successfully");
+    } catch (error: any) {
+      SendResponse.ErrorResponse(res, error, error.message || "Failed to update image");
+    }
   };
 }
 

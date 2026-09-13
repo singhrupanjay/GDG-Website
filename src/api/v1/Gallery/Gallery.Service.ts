@@ -82,7 +82,7 @@ class GalleryService {
   ) {
     try {
       const updatedGallery = await Gallery.findOneAndUpdate(
-        { _id: galleryId }, // Filter by ID
+        { _id: galleryId, uploadedBy: userId }, // Ensure user owns the gallery
         {
           $push: {
             images: {
@@ -93,17 +93,48 @@ class GalleryService {
             },
           },
         },
-        { new: true, runValidators: true }, // Return updated doc
+        { new: true, runValidators: true },
       );
 
       if (!updatedGallery) {
-        throw new Error("Failed to add image to gallery");
+        throw new Error("Failed to add image (Gallery not found or unauthorized)");
       }
 
       return updatedGallery;
     } catch (error: any) {
       console.error("Error adding image:", error);
       throw new Error(error.message || "Failed to add image to gallery");
+    }
+  }
+
+  async updateImageInGallery(
+    galleryId: string,
+    imageUrl: string,
+    updateData: {
+      caption?: string;
+      featured?: boolean;
+    },
+    userId: string,
+  ) {
+    try {
+      const updateFields: any = {};
+      if (updateData.caption !== undefined) updateFields["images.$.caption"] = updateData.caption;
+      if (updateData.featured !== undefined) updateFields["images.$.featured"] = updateData.featured;
+
+      const updatedGallery = await Gallery.findOneAndUpdate(
+        { _id: galleryId, "images.url": imageUrl, uploadedBy: userId }, // Ensure ownership
+        {
+          $set: updateFields,
+        },
+        { new: true, runValidators: true },
+      );
+      if (!updatedGallery) {
+        throw new Error("Failed to update image (Gallery/Image not found or unauthorized)");
+      }
+      return updatedGallery;
+    } catch (error: any) {
+      console.error("Error updating image:", error);
+      throw new Error(error.message || "Failed to update image in gallery");
     }
   }
 }

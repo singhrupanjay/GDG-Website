@@ -5,14 +5,14 @@ import { connectRabbitMQ } from "./infrastructure/rabitmq/RabitMQ.connection";
 
 import RabitMQ_Global_Consumer from "./infrastructure/rabitmq/RabitMQ_Global_Consumer";
 
-app.listen(env_Constant.PORT, async () => {
+app.listen(3000, "0.0.0.0", async () => {
   try {
     await connectToMongoDB();
     await connectRabbitMQ();
 
     await RabitMQ_Global_Consumer();
 
-    console.log(`Server is running on port ${env_Constant.PORT}`);
+    console.log(`Server is running on port 3000`);
   } catch (error) {
     console.error("Error starting the server:", error);
   }

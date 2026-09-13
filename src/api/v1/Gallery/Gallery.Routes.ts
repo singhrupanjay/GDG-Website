@@ -10,6 +10,24 @@ routes.post(
   GalleryController.Create_New_Gallery,
 );
 
+routes.post(
+  "/image",
+  AuthMiddleware.verifyAccessToken,
+  GalleryController.AddImageToGallery,
+);
+
+routes.delete(
+  "/image",
+  AuthMiddleware.verifyAccessToken,
+  GalleryController.DeleteImageFromGallery,
+);
+
+routes.patch(
+  "/image",
+  AuthMiddleware.verifyAccessToken,
+  GalleryController.UpdateImageInGallery,
+);
+
 routes.get("/findGalleryBySlug/:Slug", GalleryController.FIND_SINGLE_GALLERY);
 
 routes.get("/findAllGallery", GalleryController.FIND_ALL_GALLERY);
