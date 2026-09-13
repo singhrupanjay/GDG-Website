@@ -23,4 +23,10 @@ route.post(
   permissionController.removePermission,
 );
 
+route.delete(
+  "/permission/delete/:permissionId",
+  AuthMiddleware.verifyAccessToken,
+  permissionController.deletePermission,
+);
+
 export { route as PermissionRoutes };

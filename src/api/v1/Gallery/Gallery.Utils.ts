@@ -35,6 +35,9 @@ class GalleryUtils {
       title: galleryName,
     });
   };
+  FIND_GALLERY_BY_ID = async (galleryId: string) => {
+    return await Gallery.findById(galleryId);
+  };
 }
 
 export default new GalleryUtils();
