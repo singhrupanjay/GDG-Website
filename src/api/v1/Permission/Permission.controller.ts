@@ -7,7 +7,7 @@ import { authUtils } from "../Auth/Auth.Utils";
 class PermissionController {
   async getUserPermissions(req: Request, res: Response) {
     try {
-      const { userId } = req.query;
+      const userId = req.query?.userId || req.params?.userId || req.body?.userId || (req as any).userId;
       console.log("Fetching permissions for userId:-->", userId);
 
       if (!userId) {
@@ -42,7 +42,9 @@ class PermissionController {
     }
 
     try {
-      const { permission, memberId } = req.body;
+      const permission = req.body?.permission;
+      const memberId = req.body?.memberId;
+
       if (!Array.isArray(permission)) {
         return SendResponse.ErrorResponse(
           res,
@@ -80,7 +82,9 @@ class PermissionController {
 
   async assignOrganization(req: Request, res: Response) {
     try {
-      const { userId } = req.params;
+      const userId = req.params?.userId || req.body?.userId || req.query?.userId;
+      if (!userId) throw new Error("userId parameter is required");
+      
       const result = await permissionService.assignOrganizationPermissions(
         String(userId),
       );
@@ -100,7 +104,9 @@ class PermissionController {
 
   async checkPermission(req: Request, res: Response) {
     try {
-      const { userId } = req.params;
+      const userId = req.params?.userId || req.body?.userId || req.query?.userId;
+      if (!userId) throw new Error("userId parameter is required");
+
       const { name, minLevel } = req.query as any;
       if (!name)
         return SendResponse.ErrorResponse(res, null, "name query required");
@@ -125,10 +131,12 @@ class PermissionController {
 
   async removePermission(req: Request, res: Response) {
     try {
-      const { userId } = req.params;
+      const userId = req.params?.userId || req.body?.userId || req.query?.userId;
+      if (!userId) throw new Error("userId parameter is required");
+
       const { resource } = req.body;
       if (!resource)
-        return SendResponse.ErrorResponse(res, null, "resource required");
+        return SendResponse.ErrorResponse(res, null, "resource required in body");
       const result = await permissionService.removePermissionFromUser(
         String(userId),
         resource,
@@ -139,6 +147,24 @@ class PermissionController {
         res,
         error,
         error?.message || "Failed to remove permission",
+      );
+    }
+  }
+  
+  async deletePermission(req: Request, res: Response) {
+    try {
+      const permissionId = req.params?.permissionId || req.body?.permissionId || req.query?.permissionId;
+      if (!permissionId) throw new Error("permissionId parameter is required");
+
+      const result = await permissionService.deletePermissionDoc(
+        String(permissionId)
+      );
+      return SendResponse.SuccessResponse(res, result, "Permission document deleted completely");
+    } catch (error: any) {
+      return SendResponse.ErrorResponse(
+        res,
+        error,
+        error?.message || "Failed to delete permission",
       );
     }
   }

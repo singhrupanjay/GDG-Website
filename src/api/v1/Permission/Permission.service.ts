@@ -87,6 +87,13 @@ class PermissionService {
     });
     return !!doc;
   }
+  public async deletePermissionDoc(permissionId: string) {
+    const res = await Permission.findByIdAndDelete(permissionId);
+    if (!res) {
+      throw new Error("Permission document not found");
+    }
+    return res;
+  }
 }
 
 export const permissionService = new PermissionService();
